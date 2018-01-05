@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="node_modules/sjcl/jsdoc_toolkit-2.3.3-beta/java/src"/>
+	<classpathentry kind="lib" path="node_modules/sjcl/compress/compiler.jar"/>
+	<classpathentry kind="lib" path="node_modules/sjcl/compress/yuicompressor-2.4.2.jar"/>
+	<classpathentry kind="lib" path="node_modules/sjcl/jsdoc_toolkit-2.3.3-beta/java/classes/js.jar"/>
+	<classpathentry kind="lib" path="node_modules/sjcl/jsdoc_toolkit-2.3.3-beta/jsdebug.jar"/>
+	<classpathentry kind="lib" path="node_modules/sjcl/jsdoc_toolkit-2.3.3-beta/jsrun.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

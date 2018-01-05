@@ -1,0 +1,109 @@
+extends layout
+
+block content
+	script(type='text/javascript', src='/javascripts/script.js')
+	.modal#modalInfo
+		.content
+			.modal-content
+				center
+					img(src='../images/foodCloudLogoBlue.png' alt='Food Cloud Logo')
+					br
+					br
+					br
+					h5(class="thankyou") Thank you for using FoodClouds service !
+					h6
+					br
+					br
+					br
+	form.form-horizontal
+		center
+			img(src='../images/foodCloudLogoBlue.png' alt='Food Cloud Logo')
+			br
+			br
+			br
+			em Please select the relevent type
+			ul
+				li(class="navbar-btn btn-default waste")
+					a(href="#waste" data-toggle="tab") Waste
+				li(class="navbar-btn btn-default collection")
+					a(href="#collection" data-toggle="tab") Collection
+		div(class="container" id="exTab1")
+			div(class="tab-content")
+				div(class="tab-pane" id="waste")
+					h3 Please enter your Waste details
+					.form-group
+						label.col-sm-2.control-label(for='supplier') Supplier :
+						select.form-control#supplierWaste
+
+						label.col-sm-2.control-label(for='reason') Reason :
+						input#reason.form-control(type='text' name='reason' required="required")
+
+					.form-group
+					br
+					em
+						h4 Waste Product Details:
+					br
+					br
+					div
+						.productDetails
+							h5.control-label.pTitle(for='code') Product :
+							button.btn.button.btn-danger Remove
+							br
+							br
+							.form-group.w
+								label.col-sm-2.control-label(for='code') Code :
+								input.code.form-control.wasteInput(type='text' name="code" required="required")
+
+								label.col-sm-2.control-label(for='product') Product :
+								input.product.form-control.wasteInput(type='text' name="product" required="required")
+
+								label.col-sm-2.control-label(for='quantity') Quantity :
+								input.quantity.form-control.wasteInput(type='number' name="quantity" required="required" min="1" pattern="^[1-9]\d*$")
+
+								label.col-sm-2.control-label(for='units') Units :
+								input.units.form-control.wasteInput(type='text' name="units" required="required")
+
+								label.col-sm-2.control-label(for='category') Category :
+								input.category.form-control.wasteInput(type='text' name="category" required="required")
+					div#additionalProducts
+					button(class="btn btn-success donation"  id="addProductWaste" name="additionalProducts" type="button") Additional Product
+					button(class="btn btn-info donation" id="submitWasteBtn" type="button" name="submitWaste") Submit Waste
+				div(class="tab-pane" id="collection")
+					h3 Please enter your collection details
+					.form-group
+						label.col-sm-2.control-label(for='supplier') Supplier :
+						input#supplier.form-control(type='text' name='supplier' required="required")
+						<!--.form-group.collectionInput-->
+						label.col-sm-2.control-label(for='recipient') Recipient :
+						input#recipient.form-control(type='text' name='recipient' required="required")
+					br
+					em
+						h4 Collection Details:
+					br
+					br
+					div
+						.productDetails
+							h5.control-label.pTitle(for='code') Collection :
+							button.btn.button.btn-danger Remove
+							br
+							br
+							.form-group.c
+								label.col-sm-2.control-label(for='code') Code :
+								input.code.form-control(type='text' name="code" required="required")
+
+								label.col-sm-2.control-label(for='product') Product :
+								input.product.form-control(type='text' name="product" required="required")
+
+								label.col-sm-2.control-label(for='quantity') Quantity :
+								input.quantity.form-control(type='number' name="quantity" required="required" min="1" pattern="^[1-9]\d*$")
+
+								label.col-sm-2.control-label(for='units') Units :
+								input.units.form-control(type='text' name="units" required="required")
+
+								label.col-sm-2.control-label(for='category') Category :
+								input.category.form-control(type='text' name="category" required="required")
+					div#additionalCollections
+					button(class="btn btn-success donation"  id="addProductCollection" name="additionalProducts" type="button" value="Add additional Product") Additional Collection
+					button(class="btn btn-info donation" id="submitCollectionBtn" type="button" name="submitCollection" value="Submit Collection") Submit Collection
+	br
+	br

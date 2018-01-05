@@ -1,0 +1,29 @@
+{
+  "name": "HyperDatum",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "bootstrap": "^3.3.7",
+    "bootstrap-dialog": "^1.34.6",
+    "cf-deployment-tracker-client": "^0.1.3",
+    "express": "^3.2.6",
+    "express-session": "^1.15.6",
+    "fabric-ca-client": "^1.0.2",
+    "fabric-client": "^1.0.2",
+    "fs-extra": "^4.0.2",
+    "grpc": "^1.6.0",
+    "jade": "^1.11.0",
+    "jquery": "^3.2.1",
+    "log4js": "^0.6.38",
+    "node-rest-client": "^3.1.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "password": "^0.1.1",
+    "shelljs": "^0.7.8",
+    "sleep": "^5.1.1"
+  }
+}

@@ -1,0 +1,24 @@
+{
+	"agg":
+		{
+			"count": "much"
+		},
+
+  	"other":
+		{
+
+		},
+
+		"select": [
+			"SUPPLIER"
+		],
+
+		"where": {},
+
+		"group":
+			{
+				"supplier": "each supplier"
+			},
+
+			"date": []
+}

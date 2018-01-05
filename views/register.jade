@@ -1,0 +1,30 @@
+extends layout
+
+block content
+	div(class='col-md-6 col-md-offset-3')
+		form(action='/register', method='POST')
+			h2 Register your new account
+			
+			br
+		
+			label Username:
+			div
+				input(type='text', class='form-control', placeholde='Username', aria-describedby='basic-addon1', name='username' placeholder='Username')
+			
+			br
+			
+			label Password:					
+			div
+				input(type='password', class='form-control', aria-describedby='basic-addon1', name='password' placeholder='Password')
+				
+			br
+			
+			label Origanization:					
+			div
+				input(type='text', class='form-control', aria-describedby='basic-addon1', name='userOrg' placeholder='Organization')
+			
+			br
+			
+			div  		
+				div(class='btn-group' role='group')
+					button(type='submit', class='btn btn-primary') Register
