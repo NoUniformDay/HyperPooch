@@ -9,7 +9,9 @@ Like so much that has come before, HyperPooch leverages the ever-increasing capa
 There are 3 distinct core technological components in the system. They are isolated environments that communicate with each other separately.
 
 The Chaincode  - This is GoLang code that runs on/with a peer on the blockchain network. All HyperPooch blockchain ledger interactions ultimately happen here, including reading and writing directly to the ledger
+
 The Client Side JS - This is JavaScript code running in the user's web browser. User interface interaction happens here. This may appear very similar to existing systems
+
 The Server Side JS  - This is JavaScript code running our application's backend. i.e Node.js code which is the heart of the system! Sometimes referred to as our node or server code. Functions as the glue between the web admin and the blockchain ledger. 
 These are 3 isolated components that are separated. They do not share variables nor functions. They will communicate via a networking protocol such as gRPC or WebSockets.
 
