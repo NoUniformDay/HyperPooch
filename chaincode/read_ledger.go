@@ -58,19 +58,22 @@ func read(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 // Returns:
 // {
 //	"owners": [{
-//			"id": "o99999999",
-//			"company": "United Canines"
-//			"username": "alice"
+//			"id": "O99999999",
+//			"name": "Eric McEvoy",
+//			"contactNumber": "+35385674848",
+//			"contactAddress": "11 Fuchsia Park, Renmore, Galway",
 //	}],
 //	"Canines": [{
-//		"id": "m1490898165086",
-//		"color": "white",
+//		"id": "C99999",
+//		"dateOfBirth": "28/09/2011",
+//		"dateOfInsertion": "10/10/2011",
+//		"description": "Black with brown spots",
+//		"sex": "male",
+//		"address": "11 Fuchsia Park, Renmore, Galway",
 //		"docType" :"Canine",
 //		"owner": {
-//			"company": "United Canines"
-//			"username": "alice"
-//		},
-//		"size" : 35
+//			"name": "Eric McEvoy"
+//		}
 //	}]
 // }
 // ============================================================================================================================
@@ -82,7 +85,7 @@ func read_everything(stub shim.ChaincodeStubInterface) pb.Response {
 	var everything Everything
 
 	// ---- Get All Canines ---- //
-	resultsIterator, err := stub.GetStateByRange("m0", "m9999999999999999999")
+	resultsIterator, err := stub.GetStateByRange("C1", "C999")
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -120,9 +123,9 @@ func read_everything(stub shim.ChaincodeStubInterface) pb.Response {
 		var owner Owner
 		json.Unmarshal(queryValAsBytes, &owner)                   //un stringify it aka JSON.parse()
 
-		if owner.Enabled {                                        //only return enabled owners
+		                                  
 			everything.Owners = append(everything.Owners, owner)  //add this Canine to the list
-		}
+		
 	}
 	fmt.Println("owner array - ", everything.Owners)
 
@@ -196,7 +199,7 @@ func getHistory(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 // Inputs - Array of strings
 //       0     ,    1
 //   startKey  ,  endKey
-//  "Canines1" , "Canines5"
+//  "C1" , "C5"
 // ============================================================================================================================
 func getCaninesByRange(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if len(args) != 2 {

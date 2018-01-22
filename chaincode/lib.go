@@ -40,8 +40,8 @@ func get_owner(stub shim.ChaincodeStubInterface, id string) (Owner, error) {
 	}
 	json.Unmarshal(ownerAsBytes, &owner)                       //un stringify it aka JSON.parse()
 
-	if len(owner.Username) == 0 {                              //test if owner is actually here or just nil
-		return owner, errors.New("Owner does not exist - " + id + ", '" + owner.Username + "' '" + owner.Company + "'")
+	if len(owner.Name) == 0 {                              //test if owner is actually here or just nil
+		return owner, errors.New("Owner does not exist - " + id + ", '" + owner.Name)
 	}
 	
 	return owner, nil

@@ -25,25 +25,28 @@ type SimpleChaincode struct {
 // ----- Canines ----- //
 type Canine struct {
 	ObjectType string        `json:"docType"` //field for couchdb
-	Id       string          `json:"id"`      //the fieldtags are needed to keep case from bouncing around
-	Color      string        `json:"color"`
-	Size       int           `json:"size"`    //size in mm of Canine
-	Owner      OwnerRelation `json:"owner"`
+	Id         string        `json:"id"`      //unique identifier (ID) of the microchip inserted in the dog
+	Name       string        `json:"name"`    //Animal name
+	DateOfBirth string       `json:"dateOfBirth"` //Animal date of birth
+	DateOfInsertion string   `json:"dateOfInsertion"`//Date of insertion of microchip
+	Description     string   `json:"description"`   //description of the dog which may include breed, colour and markings,
+	Sex        string        `json:"sex"`     //sex of the dog
+	Address    string        `json:"address"` //address of the premises where the dog is normally kept
+	Owner      OwnerRelation `json:"owner"`	 //link to the animal owner
 }
 
 // ----- Owners ----- //
 type Owner struct {
 	ObjectType string `json:"docType"`     //field for couchdb
-	Id         string `json:"id"`
-	Username   string `json:"username"`
-	Company    string `json:"company"`
-	Enabled    bool   `json:"enabled"`     //disabled owners will not be visible to the application
+	Id         string `json:"id"`          //unique identifier of owner 
+	Name       string `json:"name"` //Owner name
+	ContactNumber    string `json:"contactNumber"`
+	ContactAddress   string `json:"contactAddress"` //Owner contact details
 }
 
 type OwnerRelation struct {
 	Id         string `json:"id"`
-	Username   string `json:"username"`    //this is mostly cosmetic/handy, the real relation is by Id not Username
-	Company    string `json:"company"`     //this is mostly cosmetic/handy, the real relation is by Id not Company
+	Name   string `json:"name"`    //this is mostly cosmetic/handy, the real relation is by Id not Username
 }
 
 // ============================================================================================================================
