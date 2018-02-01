@@ -24,10 +24,8 @@ var fs = require('fs-extra');
 var User = require('fabric-client/lib/User.js');
 var crypto = require('crypto');
 var copService = require('fabric-ca-client');
-var config = require('../config.json');
 
 var hfc = require('fabric-client');
-hfc.addConfigFile(path.join(__dirname, 'network-config.json'));
 hfc.setLogger(logger);
 var ORGS = hfc.getConfigSetting('network-config');
 
@@ -44,7 +42,7 @@ for (let key in ORGS) {
 		cryptoSuite.setCryptoKeyStore(hfc.newCryptoKeyStore({path: getKeyStoreForOrg(ORGS[key].name)}));
 		client.setCryptoSuite(cryptoSuite);
 
-		let channel = client.newChannel(config.channelName);
+		let channel = client.newChannel(hfc.getConfigSetting('channelName'));
 		channel.addOrderer(newOrderer(client));
 
 		clients[key] = client;
@@ -54,33 +52,22 @@ for (let key in ORGS) {
 
 		let caUrl = ORGS[key].ca;
 		caClients[key] = new copService(caUrl, null /*defautl TLS opts*/, '' /* default CA */, cryptoSuite);
-
-		// test
-		logger.info("ORG KEY: ", key);
-		logger.info("ORG NAME: ", ORGS[key].name);
-		
-		logger.info("ORG ID: ", ORGS[key].mspid);
-		logger.info("ORG ADMIN", ORGS[key].admin);
 	}
 }
 
 function setupPeers(channel, org, client) {
-	for (let key in ORGS[org]) {
-		if (key.indexOf('peer') === 0) {
-			let data = fs.readFileSync(path.join(__dirname, ORGS[org][key]['tls_cacerts']));
-			let peer = client.newPeer(
-				ORGS[org][key].requests,
-				{
-					pem: Buffer.from(data).toString(),
-					'ssl-target-name-override': ORGS[org][key]['server-hostname']
-				}
-			);
+	for (let key in ORGS[org].peers) {
+		let data = fs.readFileSync(path.join(__dirname, ORGS[org].peers[key]['tls_cacerts']));
+		let peer = client.newPeer(
+			ORGS[org].peers[key].requests,
+			{
+				pem: Buffer.from(data).toString(),
+				'ssl-target-name-override': ORGS[org].peers[key]['server-hostname']
+			}
+		);
+		peer.setName(key);
 
-			// test
-			logger.info("Peer URL: ", ORGS[org][key].requests);
-
-			channel.addPeer(peer);
-		}
+		channel.addPeer(peer);
 	}
 }
 
@@ -88,7 +75,7 @@ function newOrderer(client) {
 	var caRootsPath = ORGS.orderer.tls_cacerts;
 	let data = fs.readFileSync(path.join(__dirname, caRootsPath));
 	let caroots = Buffer.from(data).toString();
-	return client.newOrderer(config.orderer, {
+	return client.newOrderer(ORGS.orderer.url, {
 		'pem': caroots,
 		'ssl-target-name-override': ORGS.orderer['server-hostname']
 	});
@@ -106,65 +93,40 @@ function readAllFiles(dir) {
 }
 
 function getOrgName(org) {
-	logger.info("Org: ", org);
 	return ORGS[org].name;
 }
 
 function getKeyStoreForOrg(org) {
-	return config.keyValueStore + '_' + org;
+	return hfc.getConfigSetting('keyValueStore') + '_' + org;
 }
 
-function newRemotes(urls, forPeers, userOrg) {
-	var targets = [];
-	// find the peer that match the urls
-	outer:
-	for (let index in urls) {
-		let peerUrl = urls[index];
+function newRemotes(names, forPeers, userOrg) {
+	let client = getClientForOrg(userOrg);
 
-		let found = false;
-		for (let key in ORGS) {
-			if (key.indexOf('org') === 0) {
-				// if looking for event hubs, an app can only connect to
-				// event hubs in its own org
-				if (!forPeers && key !== userOrg) {
-					continue;
-				}
+	let targets = [];
+	// find the peer that match the names
+	for (let idx in names) {
+		let peerName = names[idx];
+		if (ORGS[userOrg].peers[peerName]) {
+			// found a peer matching the name
+			let data = fs.readFileSync(path.join(__dirname, ORGS[userOrg].peers[peerName]['tls_cacerts']));
+			let grpcOpts = {
+				pem: Buffer.from(data).toString(),
+				'ssl-target-name-override': ORGS[userOrg].peers[peerName]['server-hostname']
+			};
 
-				let org = ORGS[key];
-				let client = getClientForOrg(key);
-
-				for (let prop in org) {
-					if (prop.indexOf('peer') === 0) {
-						if (org[prop]['requests'].indexOf(peerUrl) >= 0) {
-							// found a peer matching the subject url
-							if (forPeers) {
-								let data = fs.readFileSync(path.join(__dirname, org[prop]['tls_cacerts']));
-								targets.push(client.newPeer('grpcs://' + peerUrl, {
-									pem: Buffer.from(data).toString(),
-									'ssl-target-name-override': org[prop]['server-hostname']
-								}));
-
-								continue outer;
-							} else {
-								let eh = client.newEventHub();
-								let data = fs.readFileSync(path.join(__dirname, org[prop]['tls_cacerts']));
-								eh.setPeerAddr(org[prop]['events'], {
-									pem: Buffer.from(data).toString(),
-									'ssl-target-name-override': org[prop]['server-hostname']
-								});
-								targets.push(eh);
-
-								continue outer;
-							}
-						}
-					}
-				}
+			if (forPeers) {
+				targets.push(client.newPeer(ORGS[userOrg].peers[peerName].requests, grpcOpts));
+			} else {
+				let eh = client.newEventHub();
+				eh.setPeerAddr(ORGS[userOrg].peers[peerName].events, grpcOpts);
+				targets.push(eh);
 			}
 		}
+	}
 
-		if (!found) {
-			logger.error(util.format('Failed to find a peer matching the url %s', peerUrl));
-		}
+	if (targets.length === 0) {
+		logger.error(util.format('Failed to find peers matching the names %s', names));
 	}
 
 	return targets;
@@ -181,12 +143,12 @@ var getClientForOrg = function(org) {
 	return clients[org];
 };
 
-var newPeers = function(urls) {
-	return newRemotes(urls, true);
+var newPeers = function(names, org) {
+	return newRemotes(names, true, org);
 };
 
-var newEventHubs = function(urls, org) {
-	return newRemotes(urls, false, org);
+var newEventHubs = function(names, org) {
+	return newRemotes(names, false, org);
 };
 
 var getMspID = function(org) {
@@ -195,7 +157,7 @@ var getMspID = function(org) {
 };
 
 var getAdminUser = function(userOrg) {
-	var users = config.users;
+	var users = hfc.getConfigSetting('admins');
 	var username = users[0].username;
 	var password = users[0].secret;
 	var member;
@@ -236,160 +198,6 @@ var getAdminUser = function(userOrg) {
 	});
 };
 
-var register = function(username, password, userOrg, isJson) {
-	var member;
-	var client = getClientForOrg(userOrg);
-
-	return new Promise((resolve, reject) => {
-		hfc.newDefaultKeyValueStore({
-			path: getKeyStoreForOrg(getOrgName(userOrg))
-		}).then((store) => {
-			client.setStateStore(store);
-			// clearing the user context before switching
-			client._userContext = null;
-			return client.getUserContext(username, true).then((user) => {
-				if (user) {
-					console.log('User: ', user);
-					return reject('User is already exist');
-				} else {
-					let caClient = caClients[userOrg];
-					getAdminUser(userOrg).then(function(adminUserObj) {
-						member = adminUserObj;
-						logger.info("Register");
-						return caClient.register({
-							enrollmentID: username,
-							affiliation: userOrg + '.department1',
-							enrollmentSecret: password
-						}, member);
-					}).then((secret) => {
-						logger.info('Secret: ', secret);
-						logger.debug(username + ' registered successfully');
-						return enroll(username, secret, userOrg);
-					}, (err) => {
-						logger.error(username + ' failed to register Error: ' + err.stack ? err.stack : err);
-						//return '' + err;
-						return reject('' + err);
-					}).then((user) => {
-						logger.info('User: ', user);
-						if (isJson && isJson === true) {
-							var response = {
-								success: true,
-								secret: user._enrollmentSecret,
-								message: username + ' enrolled Successfully',
-							};
-							return resolve(response);
-						}
-						return resolve(user);
-					}, (err) => {
-						logger.error(util.format('Failed to get registered user: %s, error: %s', username, err.stack ? err.stack : err));
-						return reject('' + err);
-					});
-				}
-			});
-		});
-	});
-}
-
-var login = function(username, password, userOrg, isJson) {
-	var member;
-	var client = getClientForOrg(userOrg);
-	var enrollmentSecret = null;
-
-	return new Promise((resolve, reject) => {
-		hfc.newDefaultKeyValueStore({
-			path: getKeyStoreForOrg(getOrgName(userOrg))
-		}).then((store) => {
-			client.setStateStore(store);
-			// clearing the user context before switching
-			client._userContext = null;
-			return client.getUserContext(username, true).then((user) => {
-				if (user) {
-					return enroll(user.getName(), password, userOrg);
-				} else {
-					return reject('User is not exist');
-				}
-
-			});
-		}).then(function(user) {
-			logger.info(user);
-			if (isJson && isJson === true) {
-				var response = {
-					success: true,
-					//secret: user._enrollmentSecret,
-					message: username + ' enrolled Successfully',
-				};
-				return resolve(response);
-			}
-			return resolve(user);
-		}, (err) => {
-			logger.error(util.format('Failed to get registered user: %s, error: %s', username, err.stack ? err.stack : err));
-			return reject(err);
-		});
-	});
-};
-
-var enroll = function(username, secret, userOrg) {
-	var member;
-	var client = getClientForOrg(userOrg);
-	let caClient = caClients[userOrg];
-
-	return new Promise((resolve, reject) => {
-		caClient.enroll({
-			enrollmentID: username,
-			enrollmentSecret: secret
-		}).then((enrollment) => {
-			logger.info('Enrollment', enrollment);
-
-			if (enrollment && typeof enrollment === 'string' && enrollment.includes('Error:')) {
-				logger.error(username + ' enrollment failed');
-				return enrollment;
-			}
-
-			logger.debug(username + ' enrolled successfully');
-
-			member = new User(username);
-			member._enrollmentSecret = secret;
-			return member.setEnrollment(enrollment.key, enrollment.certificate, getMspID(userOrg));
-		}).then(() => {
-			client.setUserContext(member);
-			logger.info(member);
-			return resolve(member);
-		}, (err) => {
-			logger.error(util.format('%s enroll failed: %s', username, err.stack ? err.stack : err));
-			return reject('' + err);
-		});
-	});
-};
-
-var getUserByUsername = function(username, userOrg) {
-	var client = getClientForOrg(userOrg);
-
-	return new Promise((resolve, reject) => {
-		hfc.newDefaultKeyValueStore({
-			path: getKeyStoreForOrg(getOrgName(userOrg))
-		}).then((store) => {
-			client.setStateStore(store);
-			// clearing the user context before switching
-			client._userContext = null;
-			return client.getUserContext(username, true).then((user) => {
-				if (user) {
-					if(user.isEnrolled()) {
-						return resolve(user);
-					} else {
-						return reject('User was not Enrolled');
-					}
-				} else {
-					return reject('User is not exist');
-				}
-			});
-		}, (err) => {
-			return reject('' + err);
-		});
-	}, (err) => {
-		return reject('' + err);
-	});
-};
-
 var getRegisteredUsers = function(username, userOrg, isJson) {
 	var member;
 	var client = getClientForOrg(userOrg);
@@ -410,13 +218,14 @@ var getRegisteredUsers = function(username, userOrg, isJson) {
 					member = adminUserObj;
 					return caClient.register({
 						enrollmentID: username,
-						affiliation: userOrg + '.department1',
+						affiliation: userOrg + '.department1'
 					}, member);
 				}).then((secret) => {
 					enrollmentSecret = secret;
 					logger.debug(username + ' registered successfully');
 					return caClient.enroll({
 						enrollmentID: username,
+						enrollmentSecret: secret
 					});
 				}, (err) => {
 					logger.debug(username + ' failed to register');
@@ -428,9 +237,6 @@ var getRegisteredUsers = function(username, userOrg, isJson) {
 						logger.error(username + ' enrollment failed');
 						return message;
 					}
-					
-					logger.info(message);
-					
 					logger.debug(username + ' enrolled successfully');
 
 					member = new User(username);
@@ -492,18 +298,13 @@ var getOrgAdmin = function(userOrg) {
 };
 
 var setupChaincodeDeploy = function() {
-	process.env.GOPATH = path.join(__dirname, config.GOPATH);
+	process.env.GOPATH = path.join(__dirname, hfc.getConfigSetting('CC_SRC_PATH'));
 };
 
 var getLogger = function(moduleName) {
 	var logger = log4js.getLogger(moduleName);
 	logger.setLevel('DEBUG');
 	return logger;
-};
-
-var getPeerAddressByName = function(org, peer) {
-	var address = ORGS[org][peer].requests;
-	return address.split('grpcs://')[1];
 };
 
 exports.getChannelForOrg = getChannelForOrg;
@@ -514,11 +315,5 @@ exports.getMspID = getMspID;
 exports.ORGS = ORGS;
 exports.newPeers = newPeers;
 exports.newEventHubs = newEventHubs;
-exports.getPeerAddressByName = getPeerAddressByName;
 exports.getRegisteredUsers = getRegisteredUsers;
 exports.getOrgAdmin = getOrgAdmin;
-
-exports.login = login;
-exports.register = register;
-exports.enroll = enroll;
-exports.getUserByUsername = getUserByUsername;
