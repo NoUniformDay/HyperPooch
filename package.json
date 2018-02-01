@@ -28,6 +28,8 @@
     "fabric-client": "^1.0.0",
     "fs-extra": "^2.0.0",
     "jsonwebtoken": "^7.3.0",
-    "log4js": "^0.6.38"
+    "log4js": "^0.6.38",
+    "passport": "^0.4.0",
+    "pug": "^2.0.0-rc.4"
   }
 }
