@@ -1,6 +1,4 @@
-## Balance transfer
-
-A sample Node.js app to demonstrate **__fabric-client__** & **__fabric-ca-client__** Node.js SDK APIs
+## HyperPooch
 
 ### Prerequisites and setup:
 
@@ -10,9 +8,6 @@ A sample Node.js app to demonstrate **__fabric-client__** & **__fabric-ca-client
 * **Node.js** v6.9.0 - 6.10.0 ( __Node v7+ is not supported__ )
 * [Download Docker images](http://hyperledger-fabric.readthedocs.io/en/latest/samples.html#binaries)
 
-```
-cd fabric-samples/balance-transfer/
-```
 
 Once you have completed the above setup, you will have provisioned a local network with the following docker container configuration:
 
@@ -26,8 +21,7 @@ Once you have completed the above setup, you will have provisioned a local netwo
 
 ## Running the sample program
 
-There are two options available for running the balance-transfer sample
-
+There are two options available for running HyperPooch
 ### Option 1:
 
 ##### Terminal Window 1
@@ -61,7 +55,7 @@ PORT=4000 node app
 ##### Terminal Window 1
 
 ```
-cd fabric-samples/balance-transfer
+cd HyperPooch/scripts
 
 ./runApp.sh
 
@@ -80,7 +74,7 @@ instructions [https://stedolan.github.io/jq/](https://stedolan.github.io/jq/)
 
 With the application started in terminal 1, next, test the APIs by executing the script - **testAPIs.sh**:
 ```
-cd fabric-samples/balance-transfer
+cd HyperPooch/scripts
 
 ./testAPIs.sh
 
@@ -92,7 +86,7 @@ cd fabric-samples/balance-transfer
 
 * Register and enroll new users in Organization - **Org1**:
 
-`curl -s -X POST http://localhost:4000/users -H "content-type: application/x-www-form-urlencoded" -d 'username=Jim&orgName=org1'`
+`curl -s -X POST http://localhost:4000/users -H "content-type: application/x-www-form-urlencoded" -d 'username=Eric&orgName=org1'`
 
 **OUTPUT:**
 
@@ -100,7 +94,7 @@ cd fabric-samples/balance-transfer
 {
   "success": true,
   "secret": "RaxhMgevgJcm",
-  "message": "Jim enrolled Successfully",
+  "message": "Eric enrolled Successfully",
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI"
 }
 ```
@@ -290,5 +284,3 @@ To retrieve the IP Address for one of your network entities, issue the following
 # this will return the IP Address for peer0
 docker inspect peer0 | grep IPAddress
 ```
-
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
