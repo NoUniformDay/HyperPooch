@@ -1,12 +1,11 @@
 
 'use strict';
 var log4js = require('log4js');
-var logger = log4js.getLogger('SampleWebApp');
+var logger = log4js.getLogger('HyperPooch');
 var express = require('express');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var index = require('./routes/index')
 var http = require('http');
 var util = require('util');
 var app = express();
@@ -14,8 +13,7 @@ var expressJWT = require('express-jwt');
 var jwt = require('jsonwebtoken');
 var bearerToken = require('express-bearer-token');
 var cors = require('cors');
-var hbs = require('express-handlebars'); //view templating engine handlebars
-var path = require("path");
+var router = express.Router();
 
 require('./config.js');
 var hfc = require('fabric-client');
@@ -29,19 +27,10 @@ var invoke = require('./app/invoke-transaction.js');
 var query = require('./app/query.js');
 var host = process.env.HOST || hfc.getConfigSetting('host');
 var port = process.env.PORT || hfc.getConfigSetting('port');
-var ORG1TOKEN = hfc.getConfigSetting('ORG1TOKEN');
-
+var path = __dirname + '/views/';
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// SET CONFIGURATONS ////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-//View Templating
-app.engine('hbs', hbs({extname : 'hbs', defaultLayout : 'layout', layoutsDir : __dirname + '/views/layouts'}));
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs'); //handlebars.js
-
-
-
 app.options('*', cors());
 app.use(cors());
 //support parsing of application/json type post data
@@ -50,42 +39,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: false
 }));
-
-/*
 // set secret variable
 app.set('secret', 'thisismysecret');
-app.use(expressJWT({
-	secret: 'thisismysecret'
-}).unless({
-	path: ['/users','channel']
-}));
-app.use(bearerToken());
-app.use(function(req, res, next) {
-	if (req.originalUrl.indexOf('/users') >= 0) {
-		return next();
-	}
 
-	var token = req.token; //ORG1TOKEN;
-	jwt.verify(token, app.get('secret'), function(err, decoded) {
-		if (err) {
-			res.send({
-				success: false,
-				message: 'Failed to authenticate token. Make sure to include the ' +
-					'token returned from /users call in the authorization header ' +
-					' as a Bearer token'
-			});
-			return;
-		} else {
-			// add the decoded user name and org name to the request object
-			// for the downstream code to use
-			req.username = decoded.username;
-			req.orgname = decoded.orgName;
-			logger.debug(util.format('Decoded from JWT token: username - %s, orgname - %s', decoded.username, decoded.orgName));
-			return next();
-		}
-	});
-});
-*/
+app.use(express.static(__dirname + '/public'));
+
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// START SERVER /////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -103,10 +61,31 @@ function getErrorMessage(field) {
 	return response;
 }
 
-app.get('/', index.indexPage);
-app.get('/login', index.loginPage);
-app.get('/register', index.registerPage);
-app.get('/logout', index.logout);
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////// SITE ROUTES DEFINED HERE ///////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+router.use(function (req,res,next) {
+	  console.log("/" + req.method);
+	  next();
+});
+
+//landing page
+router.get("/",function(req,res){
+	  res.sendFile(path + "index.html");
+});
+
+//login page 
+router.get("/login",function(req,res){
+	  res.sendFile(path + "login.html");
+});
+
+//home directory - HyperPooch Admin Page
+router.get("/home",function(req,res){
+	  res.sendFile(path + "home.html");
+});
+
+app.use("/",router);
+
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////// REST ENDPOINTS START HERE ///////////////////////////
@@ -115,7 +94,6 @@ app.get('/logout', index.logout);
 app.post('/users', function(req, res) {
 	var username = req.body.username;
 	var orgName = req.body.orgName;
-	logger.debug('ORG 1 TOKEN : '+ORG1TOKEN);
 	logger.debug('End point : /users');
 	logger.debug('User name : ' + username);
 	logger.debug('Org name  : ' + orgName);
@@ -128,13 +106,6 @@ app.post('/users', function(req, res) {
 		return;
 	}
 	
-	/*
-	var token = jwt.sign({
-		exp: Math.floor(Date.now() / 1000) + parseInt(hfc.getConfigSetting('jwt_expiretime')),
-		username: username,
-		orgName: orgName
-	}, app.get('secret'));
-	*/
 	helper.getRegisteredUsers(username, orgName, true).then(function(response) {
 		if (response && typeof response !== 'string') {
 			//response.token = token;
@@ -153,8 +124,11 @@ app.post('/channels', function(req, res) {
 	logger.debug('End point : /channels');
 	var channelName = req.body.channelName;
 	var channelConfigPath = req.body.channelConfigPath;
+	var username = req.body.username;
+	var orgName = req.body.orgName;
 	logger.debug('Channel name : ' + channelName);
 	logger.debug('channelConfigPath : ' + channelConfigPath); //../artifacts/channel/mychannel.tx
+	
 	if (!channelName) {
 		res.json(getErrorMessage('\'channelName\''));
 		return;
@@ -163,8 +137,9 @@ app.post('/channels', function(req, res) {
 		res.json(getErrorMessage('\'channelConfigPath\''));
 		return;
 	}
-
-	channels.createChannel(channelName, channelConfigPath, req.username, req.orgname)
+	
+	 channels.createChannel(channelName, channelConfigPath, username, orgName)
+	 //channels.createChannel('mychannel', '../artifacts/channel/mychannel.tx', 'EricMcEvoy', 'org1')
 	.then(function(message) {
 		res.send(message);
 	});
@@ -172,7 +147,7 @@ app.post('/channels', function(req, res) {
 // Join Channel
 app.post('/channels/:channelName/peers', function(req, res) {
 	logger.info('<<<<<<<<<<<<<<<<< J O I N  C H A N N E L >>>>>>>>>>>>>>>>>');
-	var channelName = req.params.channelName;
+	var channelName = req.body.channelName;
 	var peers = req.body.peers;
 	logger.debug('channelName : ' + channelName);
 	logger.debug('peers : ' + peers);
@@ -185,7 +160,7 @@ app.post('/channels/:channelName/peers', function(req, res) {
 		return;
 	}
 
-	join.joinChannel(channelName, peers, req.username, req.orgname)
+	join.joinChannel(channelName, peers, req.body.username, req.body.orgName)
 	.then(function(message) {
 		res.send(message);
 	});
@@ -218,7 +193,7 @@ app.post('/chaincodes', function(req, res) {
 		return;
 	}
 
-	install.installChaincode(peers, chaincodeName, chaincodePath, chaincodeVersion, req.username, req.orgname)
+	install.installChaincode(peers, chaincodeName, chaincodePath, chaincodeVersion, req.body.username, req.body.orgName)
 	.then(function(message) {
 		res.send(message);
 	});
@@ -252,7 +227,7 @@ app.post('/channels/:channelName/chaincodes', function(req, res) {
 		res.json(getErrorMessage('\'args\''));
 		return;
 	}
-	instantiate.instantiateChaincode(channelName, chaincodeName, chaincodeVersion, fcn, args, req.username, req.orgname)
+	instantiate.instantiateChaincode(channelName, chaincodeName, chaincodeVersion, fcn, args, req.body.username, req.body.orgName)
 	.then(function(message) {
 		res.send(message);
 	});
@@ -286,7 +261,7 @@ app.post('/channels/:channelName/chaincodes/:chaincodeName', function(req, res) 
 		return;
 	}
 
-	invoke.invokeChaincode(peers, channelName, chaincodeName, fcn, args, req.username, req.orgname)
+	invoke.invokeChaincode(peers, channelName, chaincodeName, fcn, args, req.body.username, req.body.orgName)
 	.then(function(message) {
 		res.send(message);
 	});
