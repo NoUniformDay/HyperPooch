@@ -109,6 +109,7 @@ app.post('/users', function(req, res) {
 	helper.getRegisteredUsers(username, orgName, true).then(function(response) {
 		if (response && typeof response !== 'string') {
 			//response.token = token;
+			res.redirect('/home');
 			res.json(response);
 		} else {
 			res.json({
