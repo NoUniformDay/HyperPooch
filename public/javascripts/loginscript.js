@@ -21,8 +21,8 @@ $(document).ready(function() {
 var enroll_user = function() {
 	console.log("inside enroll_user")
 	// 1.Parse values from enroll/login
-	var username = $('#username').val();
-	var orgName = $('#orgName').val();
+	var uname = $('#username').val();
+	var oName = $('#orgName').val();
 	
 	console.log("username :"+username);
 	console.log("org name :"+orgName);
@@ -30,8 +30,8 @@ var enroll_user = function() {
 	// 2.Create JSON object from values
 	// 3.Stringify object to string
 	var JSONString = JSON.stringify({
-		username : "EricMcEvoy",
-		orgName : "orgName"
+		username : uname,
+		orgName : oname
 	});
 
 	// 4. POST data to API to commit to blockchain
@@ -44,9 +44,13 @@ var enroll_user = function() {
 	});
 
 	function ajaxSuccessful(message){
+		
 		console.log("---------------------------Users successfully enrolled into system---------------------------------");
 		var transaction = JSON.parse(message);
-		var txID = transaction.transaction_id; // successful transaction id
+		var txID = transaction.transaction_id; 
+		// successful transaction id
+		FOR()
+		$('.RESPONSE_TABLE').HTML("<TR><TD>"+TRANSACTION.TRANSACTION_ID)
 		console.log("Transaction : " + transaction);
 		console.log("Transaction ID : " + txID);
 	}
