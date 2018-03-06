@@ -38,7 +38,6 @@ echo "POST Install chaincode on Org1"
 echo
 curl -s -X POST \
   http://localhost:4000/chaincodes \
-  -H "authorization: Bearer $ORG1_TOKEN" \
   -H "content-type: application/x-www-form-urlencoded" \
   -d "peers=peer1&peers=peer2&chaincodeName=mycc&chaincodePath=github.com/chaincode&chaincodeVersion=v0&orgName=org1&username=eric"
 
@@ -50,7 +49,6 @@ echo "POST instantiate chaincode on peer1 of Org1"
 echo
 curl -s -X POST \
   http://localhost:4000/channels/mychannel/chaincodes \
-  -H "authorization: Bearer $ORG1_TOKEN" \
   -H "content-type: application/json" \
   -d '{
   	"orgName" : "org1",
