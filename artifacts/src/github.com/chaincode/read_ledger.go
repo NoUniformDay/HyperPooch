@@ -85,7 +85,7 @@ func read_everything(stub shim.ChaincodeStubInterface) pb.Response {
 	var everything Everything
 
 	// ---- Get All Canines ---- //
-	resultsIterator, err := stub.GetStateByRange("C1", "C999")
+	resultsIterator, err := stub.GetStateByRange("C1", "C5")
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -199,7 +199,7 @@ func getHistory(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 // Inputs - Array of strings
 //       0     ,    1
 //   startKey  ,  endKey
-//  "C1" , "C5"
+//     "C1" , 	   "C5"
 // ============================================================================================================================
 func getCaninesByRange(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if len(args) != 2 {

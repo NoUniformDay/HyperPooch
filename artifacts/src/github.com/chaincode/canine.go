@@ -1,6 +1,7 @@
 /*
 Chaincode - Asset defintion
 
+Veterinary - Practice Owner
 Canine - Animal entry into the ledger
 Owner - Corresponding owner
 */
@@ -14,13 +15,27 @@ import (
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
-// SimpleChaincode example simple Chaincode implementation
+// Chaincode implementation
 type SimpleChaincode struct {
 }
 
 // ============================================================================================================================
 // Asset Definition - The ledger will store Canines and owners details
 // ============================================================================================================================
+
+type Veterinary struct {
+	ObjectType string        `json:"docType"` //field for couchdb
+	Id         string        `json:"id"`      //unique identifier (ID) practice
+	PracticeName string      `json:"practiceName"`    //Name of practice
+	Address    string        `json:"address"` //address of the premises where the dog is normally kept
+	ContactNumber    string  `json:"contactNumber"`
+	ContactAddress   string  `json:"contactAddress"` //P contact details
+}
+
+type VeterinaryRelation struct {
+	Id     string `json:"id"`
+	Name   string `json:"name"`    //The real relation is by Id not Username
+}
 
 // ----- Canines ----- //
 type Canine struct {
@@ -33,6 +48,7 @@ type Canine struct {
 	Sex        string        `json:"sex"`     //sex of the dog
 	Address    string        `json:"address"` //address of the premises where the dog is normally kept
 	Owner      OwnerRelation `json:"owner"`	 //link to the animal owner
+	Veterinary      VeterinaryRelation `json:"veterinary"`	 //link to the animal vet
 }
 
 // ----- Owners ----- //
@@ -42,7 +58,9 @@ type Owner struct {
 	Name       string `json:"name"` //Owner name
 	ContactNumber    string `json:"contactNumber"`
 	ContactAddress   string `json:"contactAddress"` //Owner contact details
+	Veterinary      VeterinaryRelation `json:"veterinary"`	 //link to the animal vet
 }
+
 
 type OwnerRelation struct {
 	Id         string `json:"id"`
@@ -160,5 +178,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 // Query - legacy function
 // ============================================================================================================================
 func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface) pb.Response {
-	return shim.Error("Unknown supported call - Query()")
+	function, args := stub.GetFunctionAndParameters()
+	fmt.Println(" ")
+	fmt.Println("starting query, for - " + function)
+	return read(stub, args)
 }

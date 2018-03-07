@@ -8,15 +8,15 @@
 $(document).ready(function() {
 
 	console.log('Document ready');
-	//get_owners(); 
+	//get_owners();  //retrieves owners from the ledger
 	//get_canines();
-	read();
+	read(); //basic read test
 
 });
 
 
 // ============================================================================================================================
-// Retrives data entered into Owners form
+// Retrieves data entered into Owners form
 // Builds an AJAX request to the server
 // POST's to the /channels/mychannel/chaincodes/mycc endpoint 
 // to perform a init_owner fcn writing the details to the blockchain ledger
@@ -42,9 +42,11 @@ var get_owners = function() {
 	});
 	
 	function ajaxSuccessful(message){
-		console.log("---------------------------Transaction Successful---------------------------------");
-		console.log(message);
-	}
+		console.log("---------------------------Queried All Collections---------------------------------");
+		console.log("Success : " +message);
+		console.log("Type of object : "+typeOf(message));
+		queryResponseData = JSON.parse(message[0]);
+    }
 	
 	function ajaxFailure(message){
 		console.log("---------------------------Transaction Failure---------------------------------");
@@ -69,14 +71,16 @@ var get_canines = function() {
 		contentType : "application/json; charset=utf-8 ",
 		success : ajaxSuccessful //successful callback fcn
 	});
-	
 
 	function ajaxSuccessful(message){
-		
-		console.log("---------------------------Transaction Successful---------------------------------");
+		console.log("---------------------------Queried Owner Success---------------------------------");
+		console.log("Success : " +message);
+		console.log("Type of object : "+typeOf(message));
+		queryResponseData = JSON.parse(message[0]);
+    }
+	function ajaxFailure(message){
+		console.log("---------------------------Transaction Failure---------------------------------");
 		console.log(message);
-		
-		
 	}
 }
 
@@ -86,10 +90,13 @@ var read = function() {
 	
 	var JSONString = JSON.stringify({
 		    fcn : "read",
-			args :[ "HYPERPOOCH"],
+			args : ["HYPER"],
 			username : "eric",
-			orgName : "org1"
+			orgName : "org1",
+			peer : "peer1"
 	})
+
+
 	// 4. POST data to API to commit to blockchain
 	$.ajax({
 		type : "GET",
@@ -101,12 +108,16 @@ var read = function() {
 	});
 	
 
-	function ajaxSuccessful(response){
-		console.log("---------------------------Transaction Successful---------------------------------");
-		//console.log(message);
-		console.log(response);
-		//console.log(body);
-	}
+	function ajaxSuccessful(message){
+		console.log("---------------------------Read Success---------------------------------");
+		console.log("Success : " +message);
+		console.log(typeof message);
+		
+		//alert(message[0].canApprove)
+		queryResponseData = JSON.stringify(message);
+		//console.log(message[0]);
+		console.log(queryResponseData);
+    }
 	
 
 	function ajaxFailure(message){

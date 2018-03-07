@@ -47,6 +47,24 @@ func get_owner(stub shim.ChaincodeStubInterface, id string) (Owner, error) {
 	return owner, nil
 }
 
+// ============================================================================================================================
+// Get Veterinary - get the veterinary asset from ledger
+// ============================================================================================================================
+func get_veterinary(stub shim.ChaincodeStubInterface, id string) (Veterinary, error) {
+	var vet Veterinary
+	vetAsBytes, err := stub.GetState(id)                     //getState retreives a key/value from the ledger
+	if err != nil {                                            //this seems to always succeed, even if key didn't exist
+		return vet, errors.New("Failed to get vet - " + id)
+	}
+	json.Unmarshal(vetAsBytes, &vet)                       //un stringify it aka JSON.parse()
+
+	if len(vet.PracticeName) == 0 {                              //test if owner is actually here or just nil
+		return vet, errors.New("Vet does not exist - " + id + ", '" + vet.PracticeName)
+	}
+	
+	return vet, nil
+}
+
 // ========================================================
 // Input Sanitation - dumb input checking, look for empty strings
 // ========================================================

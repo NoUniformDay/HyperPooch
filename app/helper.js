@@ -93,6 +93,7 @@ function readAllFiles(dir) {
 }
 
 function getOrgName(org) {
+	logger.debug("Orgs test :"+ORGS);
 	return ORGS[org].name;
 }
 

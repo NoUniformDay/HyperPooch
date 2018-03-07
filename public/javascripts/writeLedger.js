@@ -25,7 +25,7 @@ var write_owners = function() {
 	
 	var JSONString = JSON.stringify({
 		    fcn : "write",
-			args :[ "HYPERPOOCH","YES BOYS!"],
+			args :[ "HYPER","YES BOYS!"],
 			username : "eric",
 			orgName : "org1"
 	})
@@ -35,15 +35,18 @@ var write_owners = function() {
 		url : "/channels/mychannel/chaincodes/mycc",
 		data : JSONString,
 		contentType : "application/json; charset=utf-8 ",
-		success : ajaxSuccessful //successful callback fcn
+		success : ajaxSuccessful, //successful callback fcn
+		failure : ajaxFailure
 	});
 	
 
 	function ajaxSuccessful(message){
-		
 		console.log("---------------------------Transaction Successful---------------------------------");
 		console.log(message);
-		
+	}
+	function ajaxFailure(message){
+		console.log("---------------------------Transaction Failure---------------------------------");
+		console.log(message);
 	}
 }
 

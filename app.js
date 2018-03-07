@@ -43,6 +43,7 @@ app.use(bodyParser.urlencoded({
 app.set('secret', 'thisismysecret');
 
 app.use(express.static(__dirname + '/public'));
+//app.use('/public', express.static(__dirname + "/public"));
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// START SERVER /////////////////////////////////
@@ -123,6 +124,7 @@ app.post('/users', function(req, res) {
 app.post('/channels', function(req, res) {
 	logger.info('<<<<<<<<<<<<<<<<< C R E A T E  C H A N N E L >>>>>>>>>>>>>>>>>');
 	logger.debug('End point : /channels');
+	//logger.debug("Request body : "+req.body);
 	var channelName = req.body.channelName;
 	var channelConfigPath = req.body.channelConfigPath;
 	var username = req.body.username;
@@ -204,7 +206,7 @@ app.post('/channels/:channelName/chaincodes', function(req, res) {
 	logger.debug('==================== INSTANTIATE CHAINCODE ==================');
 	var chaincodeName = req.body.chaincodeName;
 	var chaincodeVersion = req.body.chaincodeVersion;
-	var channelName = req.params.channelName;
+	var channelName = req.body.channelName;
 	var fcn = req.body.fcn;
 	var args = req.body.args;
 	logger.debug('channelName  : ' + channelName);
@@ -272,10 +274,11 @@ app.get('/channels/:channelName/chaincodes/:chaincodeName', function(req, res) {
 	logger.debug('==================== QUERY BY CHAINCODE ==================');
 	var channelName = req.params.channelName;
 	var chaincodeName = req.params.chaincodeName;
-	let args = req.query.args;
-	let fcn = req.query.fcn;
-	let peer = req.query.peer;
-
+	var args = req.body.args; //was req.query.args //undefined changed to body //
+	var fcn = req.body.fcn;
+	var peer = req.query.peer;
+	logger.debug('req.body : ' + req.body);
+	logger.debug('req.query : ' + req.query);
 	logger.debug('channelName : ' + channelName);
 	logger.debug('chaincodeName : ' + chaincodeName);
 	logger.debug('fcn : ' + fcn);
@@ -297,7 +300,7 @@ app.get('/channels/:channelName/chaincodes/:chaincodeName', function(req, res) {
 		res.json(getErrorMessage('\'args\''));
 		return;
 	}
-	args = args.replace(/'/g, '"');
+	//args = args.replace(/'/g, '"');
 	args = JSON.parse(args);
 	logger.debug(args);
 
@@ -305,6 +308,7 @@ app.get('/channels/:channelName/chaincodes/:chaincodeName', function(req, res) {
 	.then(function(message) {
 		res.send(message);
 	});
+	
 });
 //  Query Get Block by BlockNumber
 app.get('/channels/:channelName/blocks/:blockId', function(req, res) {
