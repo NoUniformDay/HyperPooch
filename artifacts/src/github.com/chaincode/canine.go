@@ -155,6 +155,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	} else if function == "init_canine" {      //create a new Canine
 		return init_canine(stub, args)
 	} else if function == "set_owner" {        //change owner of a Canine
+		return init_vet(stub, args)
+	} else if function == "init_vet" {        //change owner of a Canine
 		return set_owner(stub, args)
 	} else if function == "init_owner"{        //create a new Canine owner
 		return init_owner(stub, args)

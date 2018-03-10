@@ -100,6 +100,79 @@ func delete_canine(stub shim.ChaincodeStubInterface, args []string) (pb.Response
 //     id         dateOfBirth  	dateOfInsertion     description             sex      address        owner_id
 //    "C1"        "28/09/2011"  "10/10/2011"    "brown with white spots"    "male"  "11 fuchisa park" "O5"
 // ============================================================================================================================
+func init_vet(stub shim.ChaincodeStubInterface, args []string) (pb.Response) {
+	var err error
+	fmt.Println("starting init_canine")
+
+	if len(args) != 8 {
+		return shim.Error("Incorrect number of arguments. Expecting 8")
+	}
+
+	//input sanitation
+	err = sanitize_arguments(args)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	id := args[0]
+	name := args[1]
+	dateOfBirth := args[2] //strings.ToLower(args[1])
+	dateOfInsertion := args[3]
+	description := args[4]
+	sex := args[5]
+	address := args[6]
+	owner_id := args[7]
+	
+	//check if new owner exists
+	owner, err := get_owner(stub, owner_id)
+	if err != nil {
+		fmt.Println("Failed to find owner - " + owner_id)
+		return shim.Error(err.Error())
+	}
+
+	//check if canine id already exists
+	canine, err := get_canine(stub, id)
+	if err == nil {
+		fmt.Println("This canine already exists - " + id)
+		fmt.Println(canine)
+		return shim.Error("This canine already exists - " + id)  //all stop a canine by this id exists
+	}
+
+	//build the canine json string manually
+	str := `{
+		"docType":"canine", 
+		"id": "` + id + `", 
+		"name": "` + name + `", 
+		"dateOfBirth": "` + dateOfBirth + `", 
+		"dateOfInsertion": ` + dateOfInsertion + `, 
+		"description": ` + description + `, 
+		"sex": ` + sex + `, 
+		"address": ` + address + `, 
+		"owner": {
+			"id": "` + owner_id + `", 
+			"contactNumber": "` + owner.ContactNumber + `", 
+			"contactAddress": "` + owner.ContactAddress + `"
+		}
+	}`
+	err = stub.PutState(id, []byte(str))                         //store canine with id as key
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	fmt.Println("- end init_canine")
+	return shim.Success(nil)
+}
+
+// ============================================================================================================================
+// Init canine - create a new canine, store into chaincode state
+//
+// Shows off building a key's JSON value manually
+//
+// Inputs - Array of strings
+//      0           1   			 2                       3                    5          6				7
+//     id         dateOfBirth  	dateOfInsertion     description             sex      address        owner_id
+//    "C1"        "28/09/2011"  "10/10/2011"    "brown with white spots"    "male"  "11 fuchisa park" "O5"
+// ============================================================================================================================
 func init_canine(stub shim.ChaincodeStubInterface, args []string) (pb.Response) {
 	var err error
 	fmt.Println("starting init_canine")
