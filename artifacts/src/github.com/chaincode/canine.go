@@ -27,9 +27,8 @@ type Veterinary struct {
 	ObjectType string        `json:"docType"` //field for couchdb
 	Id         string        `json:"id"`      //unique identifier (ID) practice
 	PracticeName string      `json:"practiceName"`    //Name of practice
-	Address    string        `json:"address"` //address of the premises where the dog is normally kept
+	Address    string        `json:"address"` //address of the practice premises
 	ContactNumber    string  `json:"contactNumber"`
-	ContactAddress   string  `json:"contactAddress"` //P contact details
 }
 
 type VeterinaryRelation struct {

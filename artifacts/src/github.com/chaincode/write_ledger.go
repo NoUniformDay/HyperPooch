@@ -47,65 +47,23 @@ func write(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	return shim.Success(nil)
 }
 
-// ============================================================================================================================
-// delete_canine() - remove a canine from state and from canine index
-// 
-// Shows Off DelState() - "removing"" a key/value from the ledger
+
+/// ============================================================================================================================
+// Init Vet - create a new vet aka end user, store into chaincode state
 //
-// Inputs - Array of strings
-//      0      ,         1
-//     id      ,  authed_by_company
-// "m999999999", "united canines"
-// ============================================================================================================================
-func delete_canine(stub shim.ChaincodeStubInterface, args []string) (pb.Response) {
-	fmt.Println("starting delete_canine")
-
-	if len(args) != 2 {
-		return shim.Error("Incorrect number of arguments. Expecting 2")
-	}
-
-	// input sanitation
-	err := sanitize_arguments(args)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	id := args[0]
-
-	// get the canine
-	canine, err := get_canine(stub, id)
-	if err != nil{
-		fmt.Println("Failed to find canine by id " + id)
-		return shim.Error(err.Error())
-	}else{
-		fmt.Println("Canine ID : "+canine.Id)
-	}
-	// remove the canine
-	err = stub.DelState(id)                                                 //remove the key from chaincode state
-	if err != nil {
-		return shim.Error("Failed to delete state")
-	}
-
-	fmt.Println("- end delete_canine")
-	return shim.Success(nil)
-}
-
-// ============================================================================================================================
-// Init canine - create a new canine, store into chaincode state
+// Shows off building key's value from GoLang Structure
 //
-// Shows off building a key's JSON value manually
-//
-// Inputs - Array of strings
-//      0           1   			 2                       3                    5          6				7
-//     id         dateOfBirth  	dateOfInsertion     description             sex      address        owner_id
-//    "C1"        "28/09/2011"  "10/10/2011"    "brown with white spots"    "male"  "11 fuchisa park" "O5"
+// Inputs - Array of Strings
+//     0          1         2				    3
+//  owner id     name   contactNumber    contactAddress
+// "O212"        "bob" "+3530861700129"  "11 fuchsia park"
 // ============================================================================================================================
-func init_vet(stub shim.ChaincodeStubInterface, args []string) (pb.Response) {
+func init_vet(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error
-	fmt.Println("starting init_canine")
+	fmt.Println("starting init_vet")
 
-	if len(args) != 8 {
-		return shim.Error("Incorrect number of arguments. Expecting 8")
+	if len(args) != 4 {
+		return shim.Error("Incorrect number of arguments. Expecting 4")
 	}
 
 	//input sanitation
@@ -113,56 +71,28 @@ func init_vet(stub shim.ChaincodeStubInterface, args []string) (pb.Response) {
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-
-	id := args[0]
-	name := args[1]
-	dateOfBirth := args[2] //strings.ToLower(args[1])
-	dateOfInsertion := args[3]
-	description := args[4]
-	sex := args[5]
-	address := args[6]
-	owner_id := args[7]
 	
-	//check if new owner exists
-	owner, err := get_owner(stub, owner_id)
+	
+
+	var vet Veterinary
+	vet.ObjectType = "canine_owner"
+	vet.Id =  args[0]
+	vet.PracticeName = args[1]
+	vet.Address = args[2]
+	vet.ContactNumber = args[3]
+	fmt.Println(vet)
+
+	//store vet
+	vetAsBytes, _ := json.Marshal(vet)                         //convert to array of bytes
+	err = stub.PutState(vet.Id, vetAsBytes)                    //store owner by its Id
 	if err != nil {
-		fmt.Println("Failed to find owner - " + owner_id)
+		fmt.Println("Could not store vet")
 		return shim.Error(err.Error())
 	}
 
-	//check if canine id already exists
-	canine, err := get_canine(stub, id)
-	if err == nil {
-		fmt.Println("This canine already exists - " + id)
-		fmt.Println(canine)
-		return shim.Error("This canine already exists - " + id)  //all stop a canine by this id exists
-	}
-
-	//build the canine json string manually
-	str := `{
-		"docType":"canine", 
-		"id": "` + id + `", 
-		"name": "` + name + `", 
-		"dateOfBirth": "` + dateOfBirth + `", 
-		"dateOfInsertion": ` + dateOfInsertion + `, 
-		"description": ` + description + `, 
-		"sex": ` + sex + `, 
-		"address": ` + address + `, 
-		"owner": {
-			"id": "` + owner_id + `", 
-			"contactNumber": "` + owner.ContactNumber + `", 
-			"contactAddress": "` + owner.ContactAddress + `"
-		}
-	}`
-	err = stub.PutState(id, []byte(str))                         //store canine with id as key
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	fmt.Println("- end init_canine")
+	fmt.Println("- end init_vet")
 	return shim.Success(nil)
 }
-
 // ============================================================================================================================
 // Init canine - create a new canine, store into chaincode state
 //
@@ -387,5 +317,48 @@ func disable_owner(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	}
 
 	fmt.Println("- end disable_owner")
+	return shim.Success(nil)
+}
+
+// ============================================================================================================================
+// delete_canine() - remove a canine from state and from canine index
+// 
+// Shows Off DelState() - "removing"" a key/value from the ledger
+//
+// Inputs - Array of strings
+//      0      ,         1
+//     id      ,  authed_by_company
+// "m999999999", "united canines"
+// ============================================================================================================================
+func delete_canine(stub shim.ChaincodeStubInterface, args []string) (pb.Response) {
+	fmt.Println("starting delete_canine")
+
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2")
+	}
+
+	// input sanitation
+	err := sanitize_arguments(args)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	id := args[0]
+
+	// get the canine
+	canine, err := get_canine(stub, id)
+	if err != nil{
+		fmt.Println("Failed to find canine by id " + id)
+		return shim.Error(err.Error())
+	}else{
+		fmt.Println("Canine ID : "+canine.Id)
+	}
+	// remove the canine
+	err = stub.DelState(id)                                                 //remove the key from chaincode state
+	if err != nil {
+		return shim.Error("Failed to delete state")
+	}
+
+	fmt.Println("- end delete_canine")
 	return shim.Success(nil)
 }
