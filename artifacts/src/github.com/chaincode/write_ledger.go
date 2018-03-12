@@ -62,10 +62,6 @@ func init_vet(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error
 	fmt.Println("starting init_vet")
 
-	if len(args) != 4 {
-		return shim.Error("Incorrect number of arguments. Expecting 4")
-	}
-
 	//input sanitation
 	err = sanitize_arguments(args)
 	if err != nil {
