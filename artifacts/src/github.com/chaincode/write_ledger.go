@@ -27,7 +27,7 @@ func write(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	fmt.Println("starting write")
 
 	if len(args) != 2 {
-		return shim.Error("Incorrect number of arguments. Expecting 2. key of the variable and value to set")
+		return shim.Error("Incorrect number of arguments. Expecting POO. key of the variable and value to set")
 	}
 
 	// input sanitation
@@ -61,6 +61,10 @@ func write(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 func init_vet(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error
 	fmt.Println("starting init_vet")
+	
+	if len(args) != 4 {
+		return shim.Error("Incorrect number of arguments. Expecting 4")
+	}
 
 	//input sanitation
 	err = sanitize_arguments(args)
@@ -68,10 +72,8 @@ func init_vet(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		return shim.Error(err.Error())
 	}
 	
-	
-
 	var vet Veterinary
-	vet.ObjectType = "canine_owner"
+	vet.ObjectType = "vet"
 	vet.Id =  args[0]
 	vet.PracticeName = args[1]
 	vet.Address = args[2]
