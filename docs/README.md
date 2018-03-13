@@ -13,7 +13,7 @@
 ## Running the sample program
 
 
-##### Terminal Window 
+##### Terminal Window 1 
 
 * Launch the network using by running script
 
@@ -23,11 +23,13 @@ chmod +x runApp.sh //if permission errors
 ```
 ##### Terminal Window 2
 
-* Enroll users, Create channel, Join channel, Install chaincode by running startUp.sh script
+* Enroll users, Create channel, Join channel, Install chaincode by running startUp.sh script 
+* followed by the instantiateChaincode script, separated incase of a time out
 
 ```
 cd scripts
 ./startUp.sh
+./instantiateChaincode.sh
 ```
 * This launches the required network on your local machine
 * Installs the fabric-client and fabric-ca-client node modules
