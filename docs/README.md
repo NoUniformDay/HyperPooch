@@ -52,10 +52,3 @@ cd scripts
 }
 ```
 
-
-one of your network entities, issue the following command:
-
-```
-# this will return the IP Address for peer0
-docker inspect peer0 | grep IPAddress
-```
