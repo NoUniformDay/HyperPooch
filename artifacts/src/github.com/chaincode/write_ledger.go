@@ -139,6 +139,7 @@ func init_canine(stub shim.ChaincodeStubInterface, args []string) (pb.Response) 
 		fmt.Println("Failed to find owner - " + owner_id)
 		return shim.Error(err.Error())
 	}
+	
 
 	//check if canine id already exists
 	canine, err := get_canine(stub, id)
@@ -213,13 +214,13 @@ func init_owner(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	//check if vet exists 
 	vet, err := get_veterinary(stub, vet_id)
 	if err != nil {
-		fmt.Println("Failed to find owner - " + vet_id)
+		fmt.Println("Failed to find vet  - " + vet_id)
 		return shim.Error(err.Error())
 	}
 
 	//build the owner json string manually
 	str := `{
-		"docType": "veterinary", 
+		"docType": "owner", 
 		"id": "` + owner_id + `", 
 		"practiceName": "` + name + `", 
 		"contactNumber": "` + contactNumber + `", 

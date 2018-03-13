@@ -29,15 +29,7 @@ func read(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error
 	fmt.Println("starting read")
 
-	if len(args) != 1 {
-		return shim.Error("Incorrect number of arguments. Expecting key of the var to query")
-	}
-
-	// input sanitation
-	err = sanitize_arguments(args)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
+	
 
 	key = args[0]
 	valAsbytes, err := stub.GetState(key)           //get the var from ledger
@@ -45,6 +37,9 @@ func read(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
 		return shim.Error(jsonResp)
 	}
+	
+	//jsonResp2 := "{\"Name\":\"" + key + "\",\"Result\":\"" + string(valAsbytes) + "\"}"
+	//shim.Info("Query Response:%s\n", jsonResp2,stub)
 
 	fmt.Println("- end read")
 	return shim.Success(valAsbytes)                  //send it onward
