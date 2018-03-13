@@ -238,11 +238,12 @@ app.post('/channels/:channelName/chaincodes', function(req, res) {
 // Invoke transaction on chaincode on target peers
 app.post('/channels/:channelName/chaincodes/:chaincodeName', function(req, res) {
 	logger.debug('==================== INVOKE ON CHAINCODE ==================');
-	var peers = req.body.peers;
 	var chaincodeName = req.params.chaincodeName;
 	var channelName = req.params.channelName;
 	var fcn = req.body.fcn;
 	var args = req.body.args;
+	var peers = req.body.peers;
+	logger.debug('peers  : ' + peers);
 	logger.debug('channelName  : ' + channelName);
 	logger.debug('chaincodeName : ' + chaincodeName);
 	logger.debug('fcn  : ' + fcn);
@@ -274,10 +275,11 @@ app.get('/channels/:channelName/chaincodes/:chaincodeName', function(req, res) {
 	logger.debug('==================== QUERY BY CHAINCODE ==================');
 	var channelName = req.params.channelName;
 	var chaincodeName = req.params.chaincodeName;
-	var args = req.body.args; //was req.query.args //undefined changed to body //
-	var fcn = req.body.fcn;
+	var args = req.query.args; //was req.query.args //undefined changed to body //
+	var fcn = req.query.fcn;
 	var peer = req.query.peer;
-	logger.debug('req.body : ' + req.body);
+	var username 
+	//logger.debug('req.body : ' + JSON.parse(req.body[0]));
 	logger.debug('req.query : ' + req.query);
 	logger.debug('channelName : ' + channelName);
 	logger.debug('chaincodeName : ' + chaincodeName);
@@ -301,10 +303,10 @@ app.get('/channels/:channelName/chaincodes/:chaincodeName', function(req, res) {
 		return;
 	}
 	//args = args.replace(/'/g, '"');
-	args = JSON.parse(args);
-	logger.debug(args);
+	//args = JSON.parse(args);
+	//logger.debug(args);
 
-	query.queryChaincode(peer, channelName, chaincodeName, args, fcn, req.username, req.orgname)
+	query.queryChaincode(peer, channelName, chaincodeName, args, fcn, req.query.username, req.query.orgName)
 	.then(function(message) {
 		res.send(message);
 	});
@@ -341,7 +343,7 @@ app.get('/channels/:channelName/transactions/:trxnId', function(req, res) {
 		return;
 	}
 
-	query.getTransactionByID(peer, trxnId, req.username, req.orgname)
+	query.getTransactionByID(peer, trxnId, req.query.username, req.query.orgName)
 		.then(function(message) {
 			res.send(message);
 		});
