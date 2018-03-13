@@ -9,41 +9,27 @@
 * [Download Docker images](http://hyperledger-fabric.readthedocs.io/en/latest/samples.html#binaries)
 
 
-Once you have completed the above setup, you will have provisioned a local network with the following docker container configuration:
-
-* 2 CAs
-* A SOLO orderer
-* 4 peers (2 peers per Org)
-
-#### Artifacts
-* Crypto material has been generated using the **cryptogen** tool from Hyperledger Fabric and mounted to all peers, the orderering node and CA containers. More details regarding the cryptogen tool are available [here](http://hyperledger-fabric.readthedocs.io/en/latest/build_network.html#crypto-generator).
-* An Orderer genesis block (genesis.block) and channel configuration transaction (mychannel.tx) has been pre generated using the **configtxgen** tool from Hyperledger Fabric and placed within the artifacts folder. More details regarding the configtxgen tool are available [here](http://hyperledger-fabric.readthedocs.io/en/latest/build_network.html#configuration-transaction-generator).
 
 ## Running the sample program
 
-There are two options available for running HyperPooch
-### Option 1:
 
-##### Terminal Window 1
+##### Terminal Window 
 
-* Launch the network using docker-compose
+* Launch the network using by running script
 
 ```
-docker-compose -f artifacts/docker-compose.yaml up
+chmod +x runApp.sh
+./runApp.sh
 ```
 ##### Terminal Window 2
 
-* Install the fabric-client and fabric-ca-client node modules
+* Enroll users, Create channel, Join channel, Install chaincode by running startUp.sh script
 
 ```
-npm install
+cd scripts
+./startUp.sh
 ```
 
-* Start the node app on PORT 4000
-
-```
-PORT=4000 node app
-```
 
 ##### Terminal Window 3
 
