@@ -10,9 +10,97 @@ $(document).ready(function() {
 	console.log('Document ready');
 	//get_owners();  //retrieves owners from the ledger
 	//get_canines();
-	read(); //basic read test
+	//read_owners(); //basic read test
+	read_vet();
+	//read();
 
 });
+
+var read_vet = function(range) {
+	console.log("inside read vet")
+	
+		var fcn = "read"
+		var	args = ["V1"];
+		var username = "eric"
+		var	orgName = "org1"
+		var	peer = "peer1"
+
+	// 4. POST data to API to commit to blockchain
+	$.ajax({
+		type : "GET",
+		url : "/channels/mychannel/chaincodes/mycc?fcn="+fcn+"&args[]="+args+"&username=eric&orgName=org1",
+		contentType : "application/json; charset=utf-8",
+		success : ajaxSuccessful, //successful callback fcn
+		failure : ajaxFailure
+	});
+	
+
+	function ajaxSuccessful(message){
+		console.log("---------------------------Read Success---------------------------------");
+		console.log("Success : " +message);
+		console.log(typeof message);
+		
+		//alert(message[0].canApprove)
+		//var buf = JSON.stringify(message);
+		//var temp = JSON.parse(message.toString(); 
+		
+		//queryResponseData = JSON.stringify(message[0]);
+		//queryResponseData1 = JSON.parse(message[0]);
+		//queryResponseData2 = JSON.parse(message[1]);
+		//console.log(message.docType);
+		//console.log(message[0]);
+		//console.log(queryResponseData);
+		//console.log(temp);
+    }
+	
+
+	function ajaxFailure(message){
+		console.log("---------------------------Transaction Failure---------------------------------");
+		console.log(message);
+	}
+}
+
+var read_owners = function(range) {
+	console.log("inside read")
+	
+		var fcn = "read"
+		var	args = ["HYPER"];
+		var username = "eric"
+		var	orgName = "org1"
+		var	peer = "peer1"
+
+	// 4. POST data to API to commit to blockchain
+	$.ajax({
+		type : "GET",
+		url : "/channels/mychannel/chaincodes/mycc?fcn="+fcn+"&args[]="+args+"&username=eric&orgName=org1",
+		contentType : "application/json; charset=utf-8",
+		success : ajaxSuccessful, //successful callback fcn
+		failure : ajaxFailure
+	});
+	
+
+	function ajaxSuccessful(message){
+		console.log("---------------------------Read Success---------------------------------");
+		console.log("Success : " +message);
+		console.log(typeof message);
+		
+		//alert(message[0].canApprove)
+		queryResponseData = JSON.stringify(message);
+		//queryResponseData1 = JSON.parse(message[0]);
+		//queryResponseData2 = JSON.parse(message[1]);
+		//console.log(message.docType);
+		//console.log(message[0]);
+		//console.log(queryResponseData);
+		console.log(queryResponseData);
+    }
+	
+
+	function ajaxFailure(message){
+		console.log("---------------------------Transaction Failure---------------------------------");
+		console.log(message);
+	}
+}
+
 
 
 // ============================================================================================================================
@@ -25,7 +113,7 @@ var get_owners = function() {
 	console.log("inside read_everything")
 	
 	var JSONOwnerString = JSON.stringify({
-		    fcn : "read_everything",
+		    fcn : "",
 		    peers : ["peer1","peer2"],
 		    args : ["C0","C5"],
 			username : "eric",
@@ -85,24 +173,21 @@ var get_canines = function() {
 }
 
 
+
+
 var read = function() {
 	console.log("inside read")
-	
-	var JSONString = JSON.stringify({
-		    fcn : "read",
-			args : ["HYPER"],
-			username : "eric",
-			orgName : "org1",
-			peer : "peer1"
-	})
-
+		var fcn = "read"
+		var	args = ["HYPER"];
+		var username = "eric"
+		var	orgName = "org1"
+		var	peer = "peer1"
 
 	// 4. POST data to API to commit to blockchain
 	$.ajax({
 		type : "GET",
-		url : "/channels/mychannel/chaincodes/mycc",
-		data : JSONString,
-		contentType : "application/json; charset=utf-8 ",
+		url : "/channels/mychannel/chaincodes/mycc?fcn="+fcn+"&args[]="+args+"&username=eric&orgName=org1",
+		contentType : "application/json; charset=utf-8",
 		success : ajaxSuccessful, //successful callback fcn
 		failure : ajaxFailure
 	});
@@ -115,8 +200,9 @@ var read = function() {
 		
 		//alert(message[0].canApprove)
 		queryResponseData = JSON.stringify(message);
+		queryResponseData1 = JSON.parse(queryResponseData);
 		//console.log(message[0]);
-		console.log(queryResponseData);
+		console.log(queryResponseData1);
     }
 	
 
