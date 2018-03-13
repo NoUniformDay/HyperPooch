@@ -105,8 +105,8 @@ func init_canine(stub shim.ChaincodeStubInterface, args []string) (pb.Response) 
 	var err error
 	fmt.Println("starting init_canine")
 
-	if len(args) != 8 {
-		return shim.Error("Incorrect number of arguments. Expecting 8")
+	if len(args) != 9 {
+		return shim.Error("Incorrect number of arguments. Expecting 9")
 	}
 
 	//input sanitation
@@ -123,6 +123,15 @@ func init_canine(stub shim.ChaincodeStubInterface, args []string) (pb.Response) 
 	sex := args[5]
 	address := args[6]
 	owner_id := args[7]
+	vet_id := args[8]
+	
+	
+	//check if canine's vet exists
+	vet, err := get_veterinary(stub, vet_id)
+	if err != nil {
+		fmt.Println("Failed to find vet - " + vet_id)
+		return shim.Error(err.Error())
+	}
 	
 	//check if new owner exists
 	owner, err := get_owner(stub, owner_id)
@@ -153,6 +162,11 @@ func init_canine(stub shim.ChaincodeStubInterface, args []string) (pb.Response) 
 			"id": "` + owner_id + `", 
 			"contactNumber": "` + owner.ContactNumber + `", 
 			"contactAddress": "` + owner.ContactAddress + `"
+		}, 
+		"veterinary": {
+			"id": "` + vet_id + `", 
+			"contactNumber": "` + vet.ContactNumber + `", 
+			"contactAddress": "` + vet.Address + `"
 		}
 	}`
 	err = stub.PutState(id, []byte(str))                         //store canine with id as key
@@ -178,8 +192,8 @@ func init_owner(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error
 	fmt.Println("starting init_owner")
 
-	if len(args) != 4 {
-		return shim.Error("Incorrect number of arguments. Expecting 4")
+	if len(args) != 5 {
+		return shim.Error("Incorrect number of arguments. Expecting 5")
 	}
 
 	//input sanitation
@@ -188,30 +202,41 @@ func init_owner(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		return shim.Error(err.Error())
 	}
 
-	var owner Owner
-	owner.ObjectType = "canine_owner"
-	owner.Id =  args[0]
-	owner.Name = args[1]
-	owner.ContactNumber = args[2]
-	owner.ContactAddress = args[3]
-	fmt.Println(owner)
-
-	//check if user already exists
-	_, err = get_owner(stub, owner.Id)
-	if err == nil {
-		fmt.Println("This owner already exists - " + owner.Id)
-		return shim.Error("This owner already exists - " + owner.Id)
-	}
-
-	//store user
-	ownerAsBytes, _ := json.Marshal(owner)                         //convert to array of bytes
-	err = stub.PutState(owner.Id, ownerAsBytes)                    //store owner by its Id
+	
+	owner_id :=  args[0]
+	name := args[1]
+	contactNumber := args[2]
+	contactAddress := args[3]
+	vet_id := args[4]
+	
+	
+	//check if vet exists 
+	vet, err := get_veterinary(stub, vet_id)
 	if err != nil {
-		fmt.Println("Could not store user")
+		fmt.Println("Failed to find owner - " + vet_id)
 		return shim.Error(err.Error())
 	}
 
-	fmt.Println("- end init_owner canine")
+	//build the owner json string manually
+	str := `{
+		"docType": "veterinary", 
+		"id": "` + owner_id + `", 
+		"practiceName": "` + name + `", 
+		"contactNumber": "` + contactNumber + `", 
+		"contactAddress": "` + contactAddress + `", 
+		"veterinary": {
+			"id": "` + vet.Id + `", 
+			"name": "` + vet.PracticeName + `"
+		}
+	}`
+	
+	// put owner details to the ledger
+	err = stub.PutState(owner_id, []byte(str))                         //store canine with id as key
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	fmt.Println("- end init_owner")
 	return shim.Success(nil)
 }
 
