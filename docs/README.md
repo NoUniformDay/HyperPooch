@@ -1,4 +1,17 @@
 ## HyperPooch
+### HyperPooch is a decentralised software application that uses blockchain technology as an alternative to the conventional centralised databases already in place to store pet information. This tool hopes to alleviate many problems of identification, traceability and accountability faced by all parties involved in the care and handling of pets from pet owners and veterinarians to animal wellness organisations and government bodies.
+
+### According to a press release from the then Minister for Agriculture, Food and the Marine, Simon Coveney T.D, in Ireland alone, there are currently four individual authorised databases Animark, Fido, The Irish Coursing Club and the Irish Kennel Club. That’s four different places the data on a pet’s microchip has to be stored, maintained and regulated by people. It can be a timely process for a Veterinary to access this data as they need to contact each individual administrator to find relevant owner and medical information of a lost pet. Blockchain removes the need for these costly resources and provides a trusted, secured unified registry that any body involved with pets can easily access what’s relevant to them. A decentralised blockchain network ensures lowered costs and increased speed in identifying lost, stolen or abandoned pets.
+
+### A blockchain database is an immutable ledger. This means that through clever cryptography, once data has been written to it, no one, not even a system administrator, can change it. HyperPooch is thus a better alternative to tracking an animal’s ancestry over time, such that every time a pet is born its records are securely stored in the ledger linking to parents before it. HyperPooch digitizes the cumbersome paper process guaranteeing the authenticity and traceability of a pet’s pedigree as well as the accountability of an owner in the case of an abandoned animal. 
+
+### Like so much that has come before, HyperPooch leverages the ever-increasing capacity of computer systems to provide a new way of replacing humans with code. And once it’s been written and debugged, code tends to be an awful lot cheaper. HyperPooch provides a platform of trust for parties like pet show judges, insurance companies, breeding auditors and even border controls living the the world of ever increasing industrial scale breeding and illegal trading of designer puppies.
+
+## There are 3 distinct core technological components in the system. They are isolated environments that communicate with each other separately.
+## The Chaincode  - This is GoLang code that runs on/with a peer on the blockchain network. All HyperPooch blockchain ledger interactions ultimately happen here, including reading and writing directly to the ledger
+## The Client Side JS - This is JavaScript code running in the user's web browser. User interface interaction happens here. This may appear very similar to existing systems
+## The Server Side JS  - This is JavaScript code running our application's backend. i.e Node.js code which is the heart of the system! Sometimes referred to as our node or server code. Functions as the glue between the web admin and the blockchain ledger. 
+These are 3 isolated components that are separated. They do not share variables nor functions. They will communicate via a networking protocol such as gRPC or WebSockets.
 
 ### Prerequisites and setup:
 
@@ -9,76 +22,31 @@
 * [Download Docker images](http://hyperledger-fabric.readthedocs.io/en/latest/samples.html#binaries)
 
 
-Once you have completed the above setup, you will have provisioned a local network with the following docker container configuration:
-
-* 2 CAs
-* A SOLO orderer
-* 4 peers (2 peers per Org)
-
-#### Artifacts
-* Crypto material has been generated using the **cryptogen** tool from Hyperledger Fabric and mounted to all peers, the orderering node and CA containers. More details regarding the cryptogen tool are available [here](http://hyperledger-fabric.readthedocs.io/en/latest/build_network.html#crypto-generator).
-* An Orderer genesis block (genesis.block) and channel configuration transaction (mychannel.tx) has been pre generated using the **configtxgen** tool from Hyperledger Fabric and placed within the artifacts folder. More details regarding the configtxgen tool are available [here](http://hyperledger-fabric.readthedocs.io/en/latest/build_network.html#configuration-transaction-generator).
 
 ## Running the sample program
 
-There are two options available for running HyperPooch
-### Option 1:
 
-##### Terminal Window 1
+##### Terminal Window 1 
 
-* Launch the network using docker-compose
+* Launch the network using by running script
 
 ```
-docker-compose -f artifacts/docker-compose.yaml up
-```
-##### Terminal Window 2
-
-* Install the fabric-client and fabric-ca-client node modules
-
-```
-npm install
-```
-
-* Start the node app on PORT 4000
-
-```
-PORT=4000 node app
-```
-
-##### Terminal Window 3
-
-* Execute the REST APIs from the section [Sample REST APIs Requests](https://github.com/hyperledger/fabric-samples/tree/master/balance-transfer#sample-rest-apis-requests)
-
-
-### Option 2:
-
-##### Terminal Window 1
-
-```
-cd HyperPooch/scripts
-
+chmod +x runApp.sh //if permission errors
 ./runApp.sh
-
 ```
-
-* This lauches the required network on your local machine
-* Installs the fabric-client and fabric-ca-client node modules
-* And, starts the node app on PORT 4000
-
 ##### Terminal Window 2
 
-
-In order for the following shell script to properly parse the JSON, you must install ``jq``:
-
-instructions [https://stedolan.github.io/jq/](https://stedolan.github.io/jq/)
-
-With the application started in terminal 1, next, test the APIs by executing the script - **testAPIs.sh**:
-```
-cd HyperPooch/scripts
-
-./testAPIs.sh
+* Enroll users, Create channel, Join channel, Install chaincode by running startUp.sh script 
+* followed by the instantiateChaincode script, separated incase of a time out
 
 ```
+cd scripts
+./startUp.sh
+./instantiateChaincode.sh
+```
+* This launches the required network on your local machine
+* Installs the fabric-client and fabric-ca-client node modules
+* And, starts the Nodejs server on localhost port 4000
 
 ## Sample REST APIs Requests
 
@@ -99,188 +67,3 @@ cd HyperPooch/scripts
 }
 ```
 
-The response contains the success/failure status, an **enrollment Secret** and a **JSON Web Token (JWT)** that is a required string in the Request Headers for subsequent requests.
-
-### Create Channel request
-
-```
-curl -s -X POST \
-  http://localhost:4000/channels \
-  -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI" \
-  -H "content-type: application/json" \
-  -d '{
-	"channelName":"mychannel",
-	"channelConfigPath":"../artifacts/channel/mychannel.tx"
-}'
-```
-
-Please note that the Header **authorization** must contain the JWT returned from the `POST /users` call
-
-### Join Channel request
-
-```
-curl -s -X POST \
-  http://localhost:4000/channels/mychannel/peers \
-  -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI" \
-  -H "content-type: application/json" \
-  -d '{
-	"peers": ["peer1","peer2"]
-}'
-```
-### Install chaincode
-
-```
-curl -s -X POST \
-  http://localhost:4000/chaincodes \
-  -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI" \
-  -H "content-type: application/json" \
-  -d '{
-	"peers": ["peer1","peer2"],
-	"chaincodeName":"mycc",
-	"chaincodePath":"github.com/example_cc",
-	"chaincodeVersion":"v0"
-}'
-```
-
-### Instantiate chaincode
-
-```
-curl -s -X POST \
-  http://localhost:4000/channels/mychannel/chaincodes \
-  -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI" \
-  -H "content-type: application/json" \
-  -d '{
-	"chaincodeName":"mycc",
-	"chaincodeVersion":"v0",
-	"args":["a","100","b","200"]
-}'
-```
-
-### Invoke request
-
-```
-curl -s -X POST \
-  http://localhost:4000/channels/mychannel/chaincodes/mycc \
-  -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI" \
-  -H "content-type: application/json" \
-  -d '{
-	"fcn":"move",
-	"args":["a","b","10"]
-}'
-```
-**NOTE:** Ensure that you save the Transaction ID from the response in order to pass this string in the subsequent query transactions.
-
-### Chaincode Query
-
-```
-curl -s -X GET \
-  "http://localhost:4000/channels/mychannel/chaincodes/mycc?peer=peer1&fcn=query&args=%5B%22a%22%5D" \
-  -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI" \
-  -H "content-type: application/json"
-```
-
-### Query Block by BlockNumber
-
-```
-curl -s -X GET \
-  "http://localhost:4000/channels/mychannel/blocks/1?peer=peer1" \
-  -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI" \
-  -H "content-type: application/json"
-```
-
-### Query Transaction by TransactionID
-
-```
-curl -s -X GET http://localhost:4000/channels/mychannel/transactions/TRX_ID?peer=peer1 \
-  -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI" \
-  -H "content-type: application/json"
-```
-**NOTE**: Here the TRX_ID can be from any previous invoke transaction
-
-
-### Query ChainInfo
-
-```
-curl -s -X GET \
-  "http://localhost:4000/channels/mychannel?peer=peer1" \
-  -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI" \
-  -H "content-type: application/json"
-```
-
-### Query Installed chaincodes
-
-```
-curl -s -X GET \
-  "http://localhost:4000/chaincodes?peer=peer1&type=installed" \
-  -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI" \
-  -H "content-type: application/json"
-```
-
-### Query Instantiated chaincodes
-
-```
-curl -s -X GET \
-  "http://localhost:4000/chaincodes?peer=peer1&type=instantiated" \
-  -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI" \
-  -H "content-type: application/json"
-```
-
-### Query Channels
-
-```
-curl -s -X GET \
-  "http://localhost:4000/channels?peer=peer1" \
-  -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQ4NjU1OTEsInVzZXJuYW1lIjoiSmltIiwib3JnTmFtZSI6Im9yZzEiLCJpYXQiOjE0OTQ4NjE5OTF9.yWaJhFDuTvMQRaZIqg20Is5t-JJ_1BP58yrNLOKxtNI" \
-  -H "content-type: application/json"
-```
-
-### Network configuration considerations
-
-You have the ability to change configuration parameters by either directly editing the network-config.json file or provide an additional file for an alternative target network. The app uses an optional environment variable "TARGET_NETWORK" to control the configuration files to use. For example, if you deployed the target network on Amazon Web Services EC2, you can add a file "network-config-aws.json", and set the "TARGET_NETWORK" environment to 'aws'. The app will pick up the settings inside the "network-config-aws.json" file.
-
-#### IP Address** and PORT information
-
-If you choose to customize your docker-compose yaml file by hardcoding IP Addresses and PORT information for your peers and orderer, then you MUST also add the identical values into the network-config.json file. The paths shown below will need to be adjusted to match your docker-compose yaml file.
-
-```
-		"orderer": {
-			"url": "grpcs://x.x.x.x:7050",
-			"server-hostname": "orderer0",
-			"tls_cacerts": "../artifacts/tls/orderer/ca-cert.pem"
-		},
-		"org1": {
-			"ca": "http://x.x.x.x:7054",
-			"peer1": {
-				"requests": "grpcs://x.x.x.x:7051",
-				"events": "grpcs://x.x.x.x:7053",
-				...
-			},
-			"peer2": {
-				"requests": "grpcs://x.x.x.x:7056",
-				"events": "grpcs://x.x.x.x:7058",
-				...
-			}
-		},
-		"org2": {
-			"ca": "http://x.x.x.x:8054",
-			"peer1": {
-				"requests": "grpcs://x.x.x.x:8051",
-				"events": "grpcs://x.x.x.x:8053",
-				...			},
-			"peer2": {
-				"requests": "grpcs://x.x.x.x:8056",
-				"events": "grpcs://x.x.x.x:8058",
-				...
-			}
-		}
-
-```
-
-#### Discover IP Address
-
-To retrieve the IP Address for one of your network entities, issue the following command:
-
-```
-# this will return the IP Address for peer0
-docker inspect peer0 | grep IPAddress
-```
