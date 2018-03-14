@@ -28,9 +28,7 @@ func read(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var key, jsonResp string
 	var err error
 	fmt.Println("starting read")
-
 	
-
 	key = args[0]
 	valAsbytes, err := stub.GetState(key)           //get the var from ledger
 	if err != nil {
@@ -38,12 +36,30 @@ func read(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		return shim.Error(jsonResp)
 	}
 	
-	//jsonResp2 := "{\"Name\":\"" + key + "\",\"Result\":\"" + string(valAsbytes) + "\"}"
-	//shim.Info("Query Response:%s\n", jsonResp2,stub)
-
 	fmt.Println("- end read")
 	return shim.Success(valAsbytes)                  //send it onward
 }
+
+
+// ============================================================================================================================
+// read vet asset from ledger by key
+// ============================================================================================================================
+func read_vet(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	var key, jsonResp string
+	var err error
+	fmt.Println("starting read_vet")
+	
+	key = args[0]
+	vetAsbytes, err := stub.GetState(key)           //get the var from ledger
+	if err != nil {
+		jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
+		return shim.Error(jsonResp)
+	}
+	
+	fmt.Println("- end read")
+	return shim.Success(vetAsbytes)                  //send it onward
+}
+
 
 // ============================================================================================================================
 // Get everything we need (owners + Canines + Veterinaies)

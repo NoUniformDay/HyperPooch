@@ -10,7 +10,7 @@ $(document).ready(function() {
 	console.log('Document ready');
 	//get_owners();  //retrieves owners from the ledger
 	//get_canines();
-	//read_owners(); //basic read test
+	read_owners(); //basic read test
 	read_vet();
 	//read();
 
@@ -64,7 +64,7 @@ var read_owners = function(range) {
 	console.log("inside read")
 	
 		var fcn = "read"
-		var	args = ["HYPER"];
+		var	args = ["V1"];
 		var username = "eric"
 		var	orgName = "org1"
 		var	peer = "peer1"

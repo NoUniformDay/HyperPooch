@@ -240,9 +240,11 @@ app.post('/channels/:channelName/chaincodes/:chaincodeName', function(req, res) 
 	logger.debug('==================== INVOKE ON CHAINCODE ==================');
 	var chaincodeName = req.params.chaincodeName;
 	var channelName = req.params.channelName;
+	
 	var fcn = req.body.fcn;
 	var args = req.body.args;
 	var peers = req.body.peers;
+	
 	logger.debug('peers  : ' + peers);
 	logger.debug('channelName  : ' + channelName);
 	logger.debug('chaincodeName : ' + chaincodeName);
@@ -275,12 +277,12 @@ app.get('/channels/:channelName/chaincodes/:chaincodeName', function(req, res) {
 	logger.debug('==================== QUERY BY CHAINCODE ==================');
 	var channelName = req.params.channelName;
 	var chaincodeName = req.params.chaincodeName;
-	var args = req.query.args; //was req.query.args //undefined changed to body //
+	
+	var args = req.query.args; 
 	var fcn = req.query.fcn;
 	var peer = req.query.peer;
 	var username 
-	//logger.debug('req.body : ' + JSON.parse(req.body[0]));
-	logger.debug('req.query : ' + req.query);
+
 	logger.debug('channelName : ' + channelName);
 	logger.debug('chaincodeName : ' + chaincodeName);
 	logger.debug('fcn : ' + fcn);
@@ -304,7 +306,7 @@ app.get('/channels/:channelName/chaincodes/:chaincodeName', function(req, res) {
 	}
 	//args = args.replace(/'/g, '"');
 	//args = JSON.parse(args);
-	//logger.debug(args);
+	logger.debug(args);
 
 	query.queryChaincode(peer, channelName, chaincodeName, args, fcn, req.query.username, req.query.orgName)
 	.then(function(message) {
