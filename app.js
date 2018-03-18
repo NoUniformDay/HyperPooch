@@ -9,8 +9,6 @@ var bodyParser = require('body-parser');
 var http = require('http');
 var util = require('util');
 var app = express();
-var expressJWT = require('express-jwt');
-var jwt = require('jsonwebtoken');
 var bearerToken = require('express-bearer-token');
 var cors = require('cors');
 var router = express.Router();
@@ -109,7 +107,6 @@ app.post('/users', function(req, res) {
 	
 	helper.getRegisteredUsers(username, orgName, true).then(function(response) {
 		if (response && typeof response !== 'string') {
-			//response.token = token;
 			res.redirect('/home');
 			res.json(response);
 		} else {
