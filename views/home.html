@@ -35,17 +35,21 @@
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top m-b-0">
             <div class="navbar-header"> <a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i class="fa fa-bars"></i></a>
-                <div class="top-left-part"><a class="logo" href="index.html"><b><img src="/home/plugins/images/pixeladmin-logo.png" alt="home" /></b><span class="hidden-xs"><img src="/home/plugins/images/pixeladmin-text.png" alt="home" /></span></a></div>
+                <div class="top-left-part"><a class="logo" href="index.html"><b><img src="/home/plugins/images/pawprint2.png" alt="home" /></b></a></div>
                 <ul class="nav navbar-top-links navbar-left m-l-20 hidden-xs">
                     <li>
                         <form role="search" class="app-search hidden-xs">
                             <input type="text" placeholder="Search..." class="form-control"> <a href=""><i class="fa fa-search"></i></a>
                         </form>
                     </li>
+                    <br>
+                    <li>
+                    		<h1>Welcome to HyperPooch Veterinary Dashboard!</h1>
+                    </li>
                 </ul>
                 <ul class="nav navbar-top-links navbar-right pull-right">
                     <li>
-                        <a class="profile-pic" href="#"> <img src="/home/plugins/images/users/varun.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs">Steave</b> </a>
+                        <a class="profile-pic" href="#"> <img src="/home/plugins/images/users/varun.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs">Eric</b> </a>
                     </li>
                 </ul>
             </div>
@@ -53,6 +57,9 @@
             <!-- /.navbar-top-links -->
             <!-- /.navbar-static-side -->
         </nav>
+        
+        
+        
         <!-- Left navbar-header -->
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse slimscrollsidebar">
@@ -90,7 +97,7 @@
             <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">HyperPooch Veterinary Dashboard</h4> </div>
+                        <h4 class="page-title">Built using the Linux Foundation's Open Source Hyperledger Fabric project for cross-industry standard blockchains</h4> </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> <a href="http://wrappixel.com/templates/pixeladmin/" target="_blank" class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Upgrade to Pro</a>
                         <ol class="breadcrumb">
                             <li><a href="#">Dashboard</a></li>
@@ -98,7 +105,7 @@
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
-   <!-------------------------------------------------------------------------------------------------------------------------------->
+   <!--------------------------- STATS -------------------------------------------------------------------------------->
                 <!-- row -->
                 <div class="row">
                     <!--col -->
@@ -154,7 +161,7 @@
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
- <!-------------------------------------------------------------------------------------------------------------------------------->       
+ <!-----------------------------DATA ENTRIES ----------------------------------------------------------------------------------------------->       
          		
          		<!--row -->
                 <div class="row">
@@ -167,19 +174,15 @@
                                 <table class="table ">
                                     <thead>
                                         <tr>
-                                            <th>NAME</th>
-                                            <th>STATUS</th>
-                                            <th>DATE</th>
-                                            <th>PRICE</th>
+                                            <th>ID</th>
+                                            <th>Practice Name</th>
+                                            <th>Address</th>
+                                            <th>Phone Number</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="txt-oflo">Pixel admin</td>
-                                            <td>SALE</td>
-                                            <td class="txt-oflo">April 18</td>
-                                            <td><span class="text-success">$24</span></td>
-                                        </tr>
+                                    <tbody class="vetTableBody">
+                                    
+                                     <!-- jQuery dynamically adds tables here -->  
                                         
                                     </tbody>
                                 </table> 
@@ -318,67 +321,70 @@
                         </div>
                     </div>
                 </div>
-                <!-- /.row -->
-                <!-- row -->
 <!-------------------------------------------------------------------------------------------------------------------------------->
                 <div class="row">
                 <!---------------- NEW OWNER FORM ------------------------------------>
                 		<div class="col-sm-6">
 						  <form id="contact" action="" method="post">
-						    <h3>Added a new Owner</h3>
+						    <h3>Add a new Owner</h3>
 						    	<h4>Commit details to ledger</h4>
 						    <fieldset>
-						      <input placeholder="Your name" type="text" tabindex="1" required autofocus>
+						      <input placeholder="Owner ID" type="text" tabindex="1" required>
 						    </fieldset>
 						    <fieldset>
-						      <input placeholder="Your Email Address" type="email" tabindex="2" required>
+						      <input placeholder="Owner Name" type="text" tabindex="2" required>
 						    </fieldset>
 						    <fieldset>
-						      <input placeholder="Your Phone Number (optional)" type="tel" tabindex="3" required>
+						      <input placeholder="Phone Number" type="text" tabindex="3" required>
 						    </fieldset>
 						    <fieldset>
-						      <input placeholder="Your Web Site (optional)" type="url" tabindex="4" required>
+						      <input placeholder="Address" type="text" tabindex="4" required>
 						    </fieldset>
 						    <fieldset>
-						      <textarea placeholder="Type your message here...." tabindex="5" required></textarea>
+						      <textarea placeholder="Add any extra notes here.." tabindex="5" required></textarea>
 						    </fieldset>
 						    <fieldset>
-						      <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+						      <button name="submit" type="submit" id="owner-submit" data-submit="...Sending">Submit</button>
 						    </fieldset>
-						    <p class="copyright">Designed by <a href="https://colorlib.com" target="_blank" title="Colorlib">Colorlib</a></p>
 						  </form>
 						</div>
 						
 					<!---------------- NEW CANINE FORM ------------------------------------>
 					<div class="col-sm-6">
 					  <form id="contact" action="" method="post">
-					    <h3>Added a new Canine</h3>
-					    	<h4>Commit details to ledger</h4>
-					    	<h5>Link to Owner ID before submitting</h5>
+					    <h3>Add a new Canine</h3>
+					    	<h4>Commit details to ledger, linking to Owner ID & Vet ID before submitting</h4>
+	
 					    <fieldset>
-					      <input placeholder="Your name" type="text" tabindex="1" required autofocus>
+					      <input placeholder="Canine ID (microchip)" type="text" tabindex="1" required>
 					    </fieldset>
 					    <fieldset>
-					      <input placeholder="Your Email Address" type="email" tabindex="2" required>
+					      <input placeholder="Canine Name" type="text" tabindex="2" required>
 					    </fieldset>
 					    <fieldset>
-					      <input placeholder="Your Phone Number (optional)" type="tel" tabindex="3" required>
+					      <input placeholder="Date of Birth dd/mm/yy" type="text" tabindex="3" required>
 					    </fieldset>
 					    <fieldset>
-					      <input placeholder="Your Web Site (optional)" type="url" tabindex="4" required>
+					      <input placeholder="Date of Chip Insertion dd/mm/yy" type="text" tabindex="4" required>
 					    </fieldset>
 					    <fieldset>
-					      <textarea placeholder="Type your message here...." tabindex="5" required></textarea>
+					      <input placeholder="Canine Description" type="text" tabindex="5" required>
 					    </fieldset>
 					    <fieldset>
-					      <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+					      <input placeholder="Canine Gender" type="text" tabindex="6" required>
 					    </fieldset>
-					    <p class="copyright">Designed by <a href="https://colorlib.com" target="_blank" title="Colorlib">Colorlib</a></p>
+					    <fieldset>
+					      <input placeholder="Premise Address Canine held" type="text" tabindex="7" required>
+					    </fieldset>
+					    <fieldset>
+					      <textarea placeholder="Add any extra notes here" tabindex="8" required></textarea>
+					    </fieldset>
+					    <fieldset>
+					      <button name="submit" type="submit" id="canine-submit" data-submit="...Sending">Submit</button>
+					    </fieldset>
 					  </form>
 					</div>
-                   </div>
-                    
-                        
+                   </div>  
                 </div>
                 <!-- /.row -->
             </div>
