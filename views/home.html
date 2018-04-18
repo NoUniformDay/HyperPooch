@@ -24,6 +24,7 @@
     <link href="/home/css/colors/blue-dark.css" type="text/css" id="theme" rel="stylesheet">
     <!-- spinner wheel -->
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	
 </head>
 
 <body>
@@ -39,7 +40,8 @@
                 <ul class="nav navbar-top-links navbar-left m-l-20 hidden-xs">
                     <li>
                         <form role="search" class="app-search hidden-xs">
-                            <input type="text" placeholder="Search..." class="form-control"> <a href=""><i class="fa fa-search"></i></a>
+                            <input type="text" placeholder="Search Canines..." class="form-control"><a href=""><i class="fa fa-search"></i></a>
+                            <input type="text" placeholder="Search Owners" class="form-control"> <a href=""><i class="fa fa-search"></i></a>
                         </form>
                     </li>
                     <br>
@@ -47,32 +49,20 @@
                     		<h1>Welcome to HyperPooch Veterinary Dashboard!</h1>
                     </li>
                 </ul>
-                <ul class="nav navbar-top-links navbar-right pull-right">
-                    <li>
-                        <a class="profile-pic" href="#"> <img src="/home/plugins/images/users/varun.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs">Eric</b> </a>
-                    </li>
-                </ul>
+              
             </div>
             <!-- /.navbar-header -->
             <!-- /.navbar-top-links -->
             <!-- /.navbar-static-side -->
         </nav>
         
-        
+     
         
         <!-- Left navbar-header -->
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse slimscrollsidebar">
                 <ul class="nav" id="side-menu">
-                    <li style="padding: 10px 0 0;">
-                        <a href="index.html" class="waves-effect"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i><span class="hide-menu">Dashboard</span></a>
-                    </li>
-                    <li>
-                        <a href="profile.html" class="waves-effect"><i class="fa fa-user fa-fw" aria-hidden="true"></i><span class="hide-menu">Profile</span></a>
-                    </li>
-                    <li>
-                        <a href="basic-table.html" class="waves-effect"><i class="fa fa-table fa-fw" aria-hidden="true"></i><span class="hide-menu">Basic Table</span></a>
-                    </li>
+                   
                     <li>
                         <a href="fontawesome.html" class="waves-effect"><i class="fa fa-font fa-fw" aria-hidden="true"></i><span class="hide-menu">Icons</span></a>
                     </li>
@@ -82,12 +72,10 @@
                     <li>
                         <a href="blank.html" class="waves-effect"><i class="fa fa-columns fa-fw" aria-hidden="true"></i><span class="hide-menu">Blank Page</span></a>
                     </li>
-                    <li>
-                        <a href="404.html" class="waves-effect"><i class="fa fa-info-circle fa-fw" aria-hidden="true"></i><span class="hide-menu">Error 404</span></a>
-                    </li>
+                   
                 </ul>
                 <div class="center p-20">
-                    <span class="hide-menu"><a href="http://wrappixel.com/templates/pixeladmin/" target="_blank" class="btn btn-danger btn-block btn-rounded waves-effect waves-light">HyperPooch</a></span>
+                    <span class="hide-menu"><a href="home.html" target="_blank" class="btn btn-danger btn-block btn-rounded waves-effect waves-light">HyperPooch</a></span>
                 </div>
             </div>
         </div>
@@ -96,15 +84,21 @@
         <div id="page-wrapper">
             <div class="container-fluid">
                 <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">HyperPooch is a decentralised software application thats use a blockchain ledger as it's underlying data store</h4> </div>
+                    
+                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                         <h4 class="page-title">Built using the Linux Foundation's Open Source Hyperledger Fabric project for cross-industry standard blockchains</h4> </div>
-                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> <a href="http://wrappixel.com/templates/pixeladmin/" target="_blank" class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Upgrade to Pro</a>
-                        <ol class="breadcrumb">
-                            <li><a href="#">Dashboard</a></li>
-                        </ol>
-                    </div>
                     <!-- /.col-lg-12 -->
-                </div>
+                    
+                     <div class="col-lg-3 col-sm-8 col-md-8 col-xs-12">
+                        <h4 class="page-title">Information entered and displayed in accordance to format specified in the Irish Microchip Regulations Act 2015</h4>
+                    </div>
+                    
+                    <div class="col-lg-3 col-sm-8 col-md-8 col-xs-12">
+                        <h4 class="page-title">Current clients and canines listed below. To add new clients enter details in the form below</h4>
+                    </div>
+                 </div>
    <!--------------------------- STATS -------------------------------------------------------------------------------->
                 <!-- row -->
                 <div class="row">
@@ -115,7 +109,7 @@
                                 <div class="col-md-6 col-sm-6 col-xs-6"> <i data-icon="E" class="linea-icon linea-basic"></i>
                                     <h5 class="text-muted vb">CLIENTS/OWNERS</h5> </div>
                                 <div class="col-md-6 col-sm-6 col-xs-6">
-                                    <h3 class="counter text-right m-t-15 text-danger">23</h3></div>
+                                    <h3 id="clientCount" class="counter text-right m-t-15 text-danger">0</h3></div>
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">40% Complete (success)</span> </div>
@@ -130,9 +124,9 @@
                         <div class="white-box">
                             <div class="col-in row">
                                 <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
-                                    <h5 class="text-muted vb">CANINES</h5> </div>
+                                    <h5 class="text-muted vb">CANINES</h5></div>
                                 <div class="col-md-6 col-sm-6 col-xs-6">
-                                    <h3 class="counter text-right m-t-15 text-megna">30</h3> </div>
+                                    <h3 id="canineCount" class="counter text-right m-t-15 text-megna">0</h3> </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-megna" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">40% Complete (success)</span> </div>
@@ -149,7 +143,7 @@
                                 <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
                                     <h5 class="text-muted vb">NEW ADDITIONS</h5> </div>
                                 <div class="col-md-6 col-sm-6 col-xs-6">
-                                    <h3 class="counter text-right m-t-15 text-primary">13</h3> </div>
+                                    <h3 id="newAdditionsCount"class="counter text-right m-t-15 text-primary">0</h3> </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">40% Complete (success)</span> </div>
@@ -161,13 +155,15 @@
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
+ 
+
  <!-----------------------------DATA ENTRIES ----------------------------------------------------------------------------------------------->       
          		
          		<!--row -->
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box">
-                            <h3 class="box-title">Veterinary Details
+                            <h3 class="box-title"><i class="fa fa-heartbeat fa-lg" aria-hidden="true"></i>  Veterinary Details
                                 
                             </h3>
                             <div class="table-responsive">
@@ -194,64 +190,26 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box">
-                            <h3 class="box-title">Owner Details
+                            <h3 class="box-title"><i class="fa fa-blind fa-lg" aria-hidden="true"></i> Owner Details
                                 
                             </h3>
                             <div class="table-responsive">
                                 <table class="table ">
                                     <thead>
                                         <tr>
-                                            <th>NAME</th>
-                                            <th>STATUS</th>
-                                            <th>DATE</th>
-                                            <th>PRICE</th>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Address</th>
+                                            <th>Phone Number</th>
+                                            <th>Vet ID</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="txt-oflo">Pixel admin</td>
-                                            <td>SALE</td>
-                                            <td class="txt-oflo">April 18</td>
-                                            <td><span class="text-success">$24</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="txt-oflo">Real Homes</td>
-                                            <td>EXTENDED</td>
-                                            <td class="txt-oflo">April 19</td>
-                                            <td><span class="text-info">$1250</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="txt-oflo">Medical Pro</td>
-                                            <td>TAX</td>
-                                            <td class="txt-oflo">April 20</td>
-                                            <td><span class="text-danger">-$24</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="txt-oflo">Hosting press</td>
-                                            <td>SALE</td>
-                                            <td class="txt-oflo">April 21</td>
-                                            <td><span class="text-success">$24</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="txt-oflo">Helping Hands</td>
-                                            <td>MEMBER</td>
-                                            <td class="txt-oflo">April 22</td>
-                                            <td><span class="text-success">$24</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="txt-oflo">Digital Agency</td>
-                                            <td>SALE</td>
-                                            <td class="txt-oflo">April 23</td>
-                                            <td><span class="text-danger">-$14</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="txt-oflo">Helping Hands</td>
-                                            <td>MEMBER</td>
-                                            <td class="txt-oflo">April 22</td>
-                                            <td><span class="text-success">$64</span></td>
-                                        </tr>
+                                     <tbody class="ownerTableBody">
+                                    
+                                     <!-- jQuery dynamically adds tables here -->  
+                                        
                                     </tbody>
-                                </table> <a href="#">Check all the sales</a> </div>
+                                </table> <a href="#"></a> </div>
                         </div>
                     </div>
                 </div>
@@ -260,128 +218,125 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box">
-                            <h3 class="box-title">Recent sales
+                            <h3 class="box-title"> <i class="fa fa-paw fa-lg"></i> Canines
                                 
                             </h3>
                             <div class="table-responsive">
                                 <table class="table ">
                                     <thead>
                                         <tr>
-                                            <th>NAME</th>
-                                            <th>STATUS</th>
-                                            <th>DATE</th>
-                                            <th>PRICE</th>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Date Of Birth</th>
+                                            <th>Date of Insertion</th>
+                                            <th>Description</th>
+                                            <th>Sex</th>
+                                            <th>Owner</th>
+                                            <th>Veterinary</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="txt-oflo">Pixel admin</td>
-                                            <td>SALE</td>
-                                            <td class="txt-oflo">April 18</td>
-                                            <td><span class="text-success">$24</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="txt-oflo">Real Homes</td>
-                                            <td>EXTENDED</td>
-                                            <td class="txt-oflo">April 19</td>
-                                            <td><span class="text-info">$1250</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="txt-oflo">Medical Pro</td>
-                                            <td>TAX</td>
-                                            <td class="txt-oflo">April 20</td>
-                                            <td><span class="text-danger">-$24</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="txt-oflo">Hosting press</td>
-                                            <td>SALE</td>
-                                            <td class="txt-oflo">April 21</td>
-                                            <td><span class="text-success">$24</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="txt-oflo">Helping Hands</td>
-                                            <td>MEMBER</td>
-                                            <td class="txt-oflo">April 22</td>
-                                            <td><span class="text-success">$24</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="txt-oflo">Digital Agency</td>
-                                            <td>SALE</td>
-                                            <td class="txt-oflo">April 23</td>
-                                            <td><span class="text-danger">-$14</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="txt-oflo">Helping Hands</td>
-                                            <td>MEMBER</td>
-                                            <td class="txt-oflo">April 22</td>
-                                            <td><span class="text-success">$64</span></td>
-                                        </tr>
+                                        <tbody class="canineTableBody">
+                                        
+                                     <!-- jQuery dynamically adds tables here --> 
+                                        
                                     </tbody>
-                                </table> <a href="#">Check all the sales</a> </div>
+                                    </tbody>
+                                </table> <a href="#"></a> </div>
                         </div>
                     </div>
                 </div>
+                
+      <!-------------------------------------------------------------------------------------------------------------------------------->          
+<section class="block remove-top" id="txmodal" style="display: none;">
+<div class="container">
+  <h2></h2>
+  <br>
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Transaction Successful</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" id="closeModal">Close</button>
+        </div>
+      </div>
+</div>
+</section>
+                
 <!-------------------------------------------------------------------------------------------------------------------------------->
                 <div class="row">
                 <!---------------- NEW OWNER FORM ------------------------------------>
                 		<div class="col-sm-6">
-						  <form id="contact" action="" method="post">
+						  <form id="contact">
 						    <h3>Add a new Owner</h3>
 						    	<h4>Commit details to ledger</h4>
 						    <fieldset>
-						      <input placeholder="Owner ID" type="text" tabindex="1" required>
+						      <input id ="ownerID" placeholder="Owner ID" type="text" tabindex="1" required>
 						    </fieldset>
 						    <fieldset>
-						      <input placeholder="Owner Name" type="text" tabindex="2" required>
+						      <input id ="ownerName" placeholder="Owner Name" type="text" tabindex="2" required>
 						    </fieldset>
 						    <fieldset>
-						      <input placeholder="Phone Number" type="text" tabindex="3" required>
+						      <input id ="ownerPhoneNumber" placeholder="Phone Number" type="text" tabindex="3" required>
 						    </fieldset>
 						    <fieldset>
-						      <input placeholder="Address" type="text" tabindex="4" required>
+						      <input id ="ownerAddress" placeholder="Address" type="text" tabindex="4" required>
 						    </fieldset>
 						    <fieldset>
-						      <textarea placeholder="Add any extra notes here.." tabindex="5" required></textarea>
+						      <input id ="vetID" placeholder="Vet ID" type="text" tabindex="5" required>
 						    </fieldset>
 						    <fieldset>
-						      <button name="submit" type="submit" id="owner-submit" data-submit="...Sending">Submit</button>
+						      <textarea id ="notes" placeholder="Add any extra notes here.." tabindex="5" required></textarea>
+						    </fieldset>
+						    <fieldset>
+						      <button type="button" id="owner_submit" class="btn btn-success">Submit</button>
 						    </fieldset>
 						  </form>
 						</div>
 						
 					<!---------------- NEW CANINE FORM ------------------------------------>
 					<div class="col-sm-6">
-					  <form id="contact" action="" method="post">
+					  <form id="contact" action="" method="">
 					    <h3>Add a new Canine</h3>
 					    	<h4>Commit details to ledger, linking to Owner ID & Vet ID before submitting</h4>
 	
 					    <fieldset>
-					      <input placeholder="Canine ID (microchip)" type="text" tabindex="1" required>
+					      <input id="canineID" placeholder="Canine ID (microchip)" type="text" tabindex="1" required>
 					    </fieldset>
 					    <fieldset>
-					      <input placeholder="Canine Name" type="text" tabindex="2" required>
+					      <input id="canineName" placeholder="Canine Name" type="text" tabindex="2" required>
 					    </fieldset>
 					    <fieldset>
-					      <input placeholder="Date of Birth dd/mm/yy" type="text" tabindex="3" required>
+					      <input id="dateOfBirth" placeholder="Date of Birth dd/mm/yy" type="text" tabindex="3" required>
 					    </fieldset>
 					    <fieldset>
-					      <input placeholder="Date of Chip Insertion dd/mm/yy" type="text" tabindex="4" required>
+					      <input id="dateOfChipInsertion" placeholder="Date of Chip Insertion dd/mm/yy" type="text" tabindex="4" required>
 					    </fieldset>
 					    <fieldset>
-					      <input placeholder="Canine Description" type="text" tabindex="5" required>
+					      <input id="description" placeholder="Canine Description" type="text" tabindex="5" required>
 					    </fieldset>
 					    <fieldset>
-					      <input placeholder="Canine Gender" type="text" tabindex="6" required>
+					      <input id="gender" placeholder="Canine Gender" type="text" tabindex="6" required>
 					    </fieldset>
 					    <fieldset>
-					      <input placeholder="Premise Address Canine held" type="text" tabindex="7" required>
+					      <input id="premiseAddress" placeholder="Premise Address Canine held" type="text" tabindex="7" required>
 					    </fieldset>
 					    <fieldset>
-					      <textarea placeholder="Add any extra notes here" tabindex="8" required></textarea>
+					      <input id="ownerID" placeholder="Owner's ID Number" type="text" tabindex="8" required>
 					    </fieldset>
 					    <fieldset>
-					      <button name="submit" type="submit" id="canine-submit" data-submit="...Sending">Submit</button>
+					      <input id="vetID" placeholder="Veterinarian's ID Number" type="text" tabindex="9" required>
 					    </fieldset>
+					    <fieldset>
+					      <textarea id="notes" placeholder="Add any extra notes here" tabindex="10" required></textarea>
+					    </fieldset>
+					    <fieldset>
+					      <button type="button" id="canine_submit" class="btn btn-success">Submit</button>
+					    </fieldset>	    
 					  </form>
 					</div>
                    </div>  
