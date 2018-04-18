@@ -5,9 +5,9 @@
  * Using AJAX requests 
  */
 
-var vID = "7f665ed411ac3c75674ea77ffffcf1924d0a810bb623dd19ea3a767341a2e026"
-var oID = "c4ac5832e366eaedcc79f56bbd5428a5d844d6150005f94dc0228058e0a6d8a6"
-var cID = "b1f75e197dbd2c38a8f5afa66ab3ca543edf8055c2726cd9b68b9b00c9addffe"
+var vID = "11d8b7283f38f96208a2a9e4a01a81164e717a7db60a36766ce33ba587be5110"
+var oID = "316a39947b914503d134878f49feff118f08ab32f8cf6ed1f4711f6548c32b73"
+var cID = "d3b50f940b2fd648e3124a89a21fcc60d866c0b43150008e0366ba8bb0769ece"
 	
 var numberOfClients = 0;
 var numberOfCanines = 0;
@@ -17,11 +17,11 @@ var newAdditions = 0;
 $(document).ready(function() {
 
 	//console.log('Document ready');
-	queryVeterinaryDetails(vID);
+	queryVeterinaryDetails("d0dc25fecffc6ea69cdc3b14f0114f2236c0884f8425bcf544c60803eddeb4f3");
 
 	//queryVeterinaryDetails(vID);
-	queryOwnerDetails(oID);
-	queryCanineDetails(cID);
+	//queryOwnerDetails(oID);
+	//queryCanineDetails("ab401a1d078a129735353afca417804923fd0da4ecb6677d3acf5ba35fd0b2ba");
 	
 	
 
@@ -48,16 +48,16 @@ var queryVeterinaryDetails = function(vID){
 		var myJSON = JSON.parse(jsonString);
 		var parsedJSON = JSON.parse(myJSON.transactionEnvelope.payload.data.actions["0"].payload.action.proposal_response_payload.extension.results.ns_rwset[1].rwset.writes["0"].value);
 		
-		//console.log(parsedJSON);
+		console.log(parsedJSON);
 		var vetID = parsedJSON.id;
 		var practiceName = parsedJSON.practiceName;
 		var address = parsedJSON.address;
 		var phone = parsedJSON.contactNumber;
 		
 		
-		//console.log("Vet ID : "+vetID);
-		//.console.log("Practice name : "+practiceName);
-		//console.log("Address : "+address);
+		console.log("Vet ID : "+vetID);
+		console.log("Practice name : "+practiceName);
+		console.log("Address : "+address);
 
 		//Update UI View Table with parsed JSON data
 		updateVeterinaryTable(parsedJSON);
@@ -77,7 +77,7 @@ var queryVeterinaryDetails = function(vID){
 //GET's from endpoint channels/mychannel/transactions/  
 //============================================================================================================================
 var queryOwnerDetails = function(oID){
-	// 1. Send POST request to RESR API to read owner data from blockchain ledger
+	// 1. Send POST request to RESR API to read Vet data from blockchain ledger
 	$.ajax({
 		type : "GET",
 		url : "http://localhost:4000/channels/mychannel/transactions/"+oID+"?peer=peer1&username=eric&orgName=org1",
@@ -87,20 +87,19 @@ var queryOwnerDetails = function(oID){
 	});
 	
 	function ajaxSuccessful(message){
-		console.log("---------------------------Owner Read Success---------------------------------");
+		console.log("---------------------------Vet Read Success---------------------------------");
 		console.log("Success : " +message);	
 		var jsonString = JSON.stringify(message);
 		var myJSON = JSON.parse(jsonString);
 		var parsedJSON = JSON.parse(myJSON.transactionEnvelope.payload.data.actions["0"].payload.action.proposal_response_payload.extension.results.ns_rwset[1].rwset.writes["0"].value);
 		
-		//console.log(parsedJSON);
-		var ownerID = parsedJSON.id;
-		var practiceName = parsedJSON.ownerName;
-		var ownerPhoneNumber = parsedJSON.ownerPhoneNumber;
-		var ownerAddress = parsedJSON.ownerAddress;
-		var vetID = parsedJSON.vetID;
+		var vetID = parsedJSON.id
+		var practiceName = parsedJSON.practiceName;
+		var address = parsedJSON.address
 		
-		updateOwnerTable(parsedJSON); //updates admin table
+		console.log("Vet ID : "+vetID);
+		console.log("Practice name : "+practiceName);
+		console.log("Address : "+address);
 	}
 	
 	function ajaxFailure(message){
@@ -135,14 +134,16 @@ var queryCanineDetails = function(cID) {
 	
 
 	function ajaxSuccessful(message){
-		console.log("---------------------------Canine Read Success---------------------------------");
+		console.log("---------------------------Vet Read Success---------------------------------");
 		console.log("Success : " +message);	
 		var jsonString = JSON.stringify(message);
 		var myJSON = JSON.parse(jsonString);
 		var parsedJSON = JSON.parse(myJSON.transactionEnvelope.payload.data.actions["0"].payload.action.proposal_response_payload.extension.results.ns_rwset[1].rwset.writes["0"].value);
-		console.log(parsedJSON)
 		
-		
+		console.log(parsedJSON);
+		//var vetID = parsedJSON.id
+		//var practiceName = parsedJSON.practiceName;
+		//var address = parsedJSON.address
 	}
 	function ajaxFailure(message){
 		console.log("---------------------------Transaction Failure---------------------------------");
@@ -161,45 +162,14 @@ function updateVeterinaryTable(obj){
 	
 	$(obj).each(function( i ){
   	var vetTable = $(
-  		' <tr><td><strong></strong>' +  obj.id + '</td>' +
+  		' <tr><td><strong></strong>' +  obj.id + '</td' +
+	    ' <td>' + obj.id + '</td>' +
 		' <td>' + obj.practiceName + '</td>' +
 		' <td>' + obj.address + '</td>' +
-		' <td>' + obj.contactNumber + '</td><br>'); 
+		' <td>' + obj.contactNumber + '</td>><br>'); 
 	        $(".vetTableBody").append(vetTable);
 	 });
 
-}
-
-function updateOwnerTable(obj){
-	var i = 0;
-	var parsedJSON = [];
-	console.log("obj owner"+obj);
-	
-	$(obj).each(function( i ){
-  	var ownerTable = $(
-  		' <tr><td><strong></strong>' +  obj.id + '</td>' +
-		' <td>' + obj.practiceName + '</td>' +
-		' <td>' + obj.contactAddress + '</td>' +
-		' <td>' + obj.contactNumber + '</td>' +
-		' <td>' + obj.veterinary.id + '</td><br>'); 
-	        $(".ownerTableBody").append(ownerTable);
-	 });
-}
-
-function updateCanineTable(obj){
-	var i = 0;
-	var parsedJSON = [];
-	console.log("obj owner"+obj);
-	
-	$(obj).each(function( i ){
-  	var ownerTable = $(
-  		' <tr><td><strong></strong>' +  obj.id + '</td>' +
-		' <td>' + obj.practiceName + '</td>' +
-		' <td>' + obj.contactAddress + '</td>' +
-		' <td>' + obj.contactNumber + '</td>' +
-		' <td>' + obj.veterinary.id + '</td><br>'); 
-	        $(".ownerTableBody").append(ownerTable);
-	 });
 }
 
 
