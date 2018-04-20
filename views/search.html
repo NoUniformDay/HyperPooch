@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=1,initial-scale=1,user-scalable=1" />
+	
+	<title>HyperPooch</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="/home/plugins/images/favicon.png">
+    
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css" />
+    <!-- Menu CSS -->
+    <link href="/home/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" type="text/css" rel="stylesheet">
+    <!-- toast CSS -->
+    <link href="/home/plugins/bower_components/toast-master/css/jquery.toast.css" type="text/css" rel="stylesheet">
+    <!-- morris CSS -->
+    <link href="/home/plugins/bower_components/morrisjs/morris.css" type="text/css" rel="stylesheet">
+    <!-- animation CSS -->
+    <link href="/home/css/animate.css" type="text/css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/home/css/style.css" type="text/css" rel="stylesheet">
+    <!-- Custom form CSS -->
+    <link href="/css/formstyle.css" type="text/css" rel="stylesheet">
+    <!-- color CSS -->
+    <link href="/home/css/colors/blue-dark.css" type="text/css" id="theme" rel="stylesheet">
+    <!-- spinner wheel -->
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	
+</head>
+
+<body>
+    <!---- Preloader ---->
+    <div class="preloader">
+       <div class="cssload-speeding-wheel"></div>
+    </div>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top m-b-0">
+            <div class="navbar-header"> <a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i class="fa fa-bars"></i></a>
+                <div class="top-left-part"><a class="logo" href="index.html"><b><img src="/home/plugins/images/pawprint2.png" alt="home" /></b></a></div>
+                <ul class="nav navbar-top-links navbar-left m-l-20 hidden-xs">
+                    <br>
+                    <li>
+                    		<h1>HyperPooch Search By Transaction!</h1>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+     
+        
+        <!-- Left navbar-header -->
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse slimscrollsidebar">
+                <ul class="nav" id="side-menu">
+                   
+                    <li>
+                        <a href="fontawesome.html" class="waves-effect"><i class="fa fa-font fa-fw" aria-hidden="true"></i><span class="hide-menu">Icons</span></a>
+                    </li>
+                    <li>
+                        <a href="map-google.html" class="waves-effect"><i class="fa fa-globe fa-fw" aria-hidden="true"></i><span class="hide-menu">Google Map</span></a>
+                    </li>
+                    <li>
+                        <a href="blank.html" class="waves-effect"><i class="fa fa-columns fa-fw" aria-hidden="true"></i><span class="hide-menu">Blank Page</span></a>
+                    </li>
+                   
+                </ul>
+                <div class="center p-20">
+                    <span class="hide-menu"><a href="/home" target="_blank" class="btn btn-danger btn-block btn-rounded waves-effect waves-light">Home</a></span>
+                </div>
+            </div>
+        </div>
+        <!-- Left navbar-header end -->
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                
+                 <div class="row">
+                  <div class="container">
+				  <form>
+				    <div class="form-group">
+				     <h2>Search for Canines</h2>
+				      <textarea id="canine_search_text" placeholder ="Enter Transaction Hash.." class="form-control" rows="5" id="comment"></textarea>
+				  	  <button id="canine_search_button" type="button" class="btn btn-success">Search</button>
+				    </div>
+				  </form>
+				  </div>
+				  
+				    <div class="col-sm-12">
+                        <div class="white-box">
+                            <h3 class="box-title"> <i class="fa fa-paw fa-lg"></i> Canine Search Results
+                                
+                            </h3>
+                            <div class="table-responsive">
+                                <table class="table ">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Date Of Birth</th>
+                                            <th>Date of Insertion</th>
+                                            <th>Description</th>
+                                            <th>Sex</th>
+                                            <th>Owner</th>
+                                            <th>Veterinary</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tbody class="canineSearchTableBody">
+                                        
+                                     <!-- jQuery dynamically adds tables here --> 
+                                        
+                                    </tbody>
+                                    </tbody>
+                                </table> <a href="#"></a> 
+                              </div>
+                        </div>
+                    </div>
+				  
+				  
+				   <div class="container">
+				  <form>
+				    <div class="form-group">
+				     <h2>Search for Owners</h2>
+				      <textarea id="owner_search_text" placeholder ="Enter Transaction Hash.." class="form-control" rows="5" id="comment"></textarea>
+				    	  <button id="owner_search_button" type="button" class="btn btn-success">Search</button>
+				    </div>
+				  </form>
+				  </div>
+				  
+				 <div class="col-sm-12">
+                        <div class="white-box">
+                            <h3 class="box-title"><i class="fa fa-blind fa-lg" aria-hidden="true"></i> Owner Search Results
+                                
+                            </h3>
+                            <div class="table-responsive">
+                                <table class="table ">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Address</th>
+                                            <th>Phone Number</th>
+                                            <th>Vet ID</th>
+                                        </tr>
+                                    </thead>
+                                     <tbody class="ownerSearchTableBody">
+                                    
+                                     <!-- jQuery dynamically adds tables here -->  
+                                        
+                                    </tbody>
+                                </table> <a href="#"></a> </div>
+                        </div>
+                    </div>
+                </div>
+                
+				 
+                 </div>
+   <!--------------------------- STATS -------------------------------------------------------------------------------->
+                <!-- row -->
+               <div class="row">
+                   
+                </div>
+                <div class="row">
+                    
+                </div>
+             </div>
+             </div> 
+     
+     
+ 
+
+                
+                   
+     
+    
+            </div>
+            <!-- /.container-fluid -->
+            <footer class="footer text-center"> 2018 HyperPooch brought to you by Eric McEvoy of the National University of Ireland, Galway </footer>
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+    <!-- jQuery -->
+    <script src="/home/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/home/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Menu Plugin JavaScript -->
+    <script src="/home/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js"></script>
+    <!--slimscroll JavaScript -->
+    <script src="/home/js/jquery.slimscroll.js"></script>
+    <!--Wave Effects -->
+    <script src="/home/js/waves.js"></script>
+    <!--Counter js -->
+    <script src="/home/plugins/bower_components/waypoints/lib/jquery.waypoints.js"></script>
+    <script src="/home/plugins/bower_components/counterup/jquery.counterup.min.js"></script>
+    <!--Morris JavaScript -->
+    <script src="/home/plugins/bower_components/raphael/raphael-min.js"></script>
+    <!-- <script src="/home/plugins/bower_components/morrisjs/morris.js"></script> -->
+    <!-- Custom Theme JavaScript -->
+    <script src="/home/js/custom.min.js"></script>
+    <script src="/home/js/dashboard1.js"></script>
+    <script src="/home/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
+    
+    <script src="/javascripts/readLedger.js"></script>
+    <script src="/javascripts/writeLedger.js"></script>
+    <script src="/javascripts/search.js"></script>
+  
+</body>
+
+</html>
