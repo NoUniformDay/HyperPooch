@@ -5,9 +5,9 @@
  * Using AJAX requests 
  */
 
-var vID = "7f665ed411ac3c75674ea77ffffcf1924d0a810bb623dd19ea3a767341a2e026"
+var vID = "c5e39213f9b0063b8484a677deaa81c80c7a74bef7fa7a223e77f5ba44bb9bce"
 var oID = "c4ac5832e366eaedcc79f56bbd5428a5d844d6150005f94dc0228058e0a6d8a6"
-var cID = "b1f75e197dbd2c38a8f5afa66ab3ca543edf8055c2726cd9b68b9b00c9addffe"
+var cID = "9e01cf7d41d5616213b50a2e84f9c468336475648f3d4e37821dbe6363acd6b3"
 	
 var numberOfClients = 0;
 var numberOfCanines = 0;
@@ -16,13 +16,9 @@ var newAdditions = 0;
 
 $(document).ready(function() {
 
-	//console.log('Document ready');
-	queryVeterinaryDetails(vID);
-
 	//queryVeterinaryDetails(vID);
-	queryOwnerDetails(oID);
-	queryCanineDetails(cID);
-	
+	//queryOwnerDetails(oID);
+	//queryCanineDetails(cID);
 	
 
 });
@@ -93,9 +89,10 @@ var queryOwnerDetails = function(oID){
 		var myJSON = JSON.parse(jsonString);
 		var parsedJSON = JSON.parse(myJSON.transactionEnvelope.payload.data.actions["0"].payload.action.proposal_response_payload.extension.results.ns_rwset[1].rwset.writes["0"].value);
 		
-		//console.log(parsedJSON);
+		console.log(parsedJSON);
 		var ownerID = parsedJSON.id;
-		var practiceName = parsedJSON.ownerName;
+		var name = parsedJSON.practiceName;
+		console.log("Name inside queryOwner: "+name);
 		var ownerPhoneNumber = parsedJSON.ownerPhoneNumber;
 		var ownerAddress = parsedJSON.ownerAddress;
 		var vetID = parsedJSON.vetID;
@@ -115,7 +112,7 @@ var queryOwnerDetails = function(oID){
 //GET's from endpoint channels/mychannel/transactions/  
 //============================================================================================================================
 var queryCanineDetails = function(cID) {
-	console.log("inside read canine")
+	console.log("inside query canine")
 	
 		var fcn = "read"
 		var	args = ["V1"];
@@ -138,10 +135,16 @@ var queryCanineDetails = function(cID) {
 		console.log("---------------------------Canine Read Success---------------------------------");
 		console.log("Success : " +message);	
 		var jsonString = JSON.stringify(message);
-		var myJSON = JSON.parse(jsonString);
-		var parsedJSON = JSON.parse(myJSON.transactionEnvelope.payload.data.actions["0"].payload.action.proposal_response_payload.extension.results.ns_rwset[1].rwset.writes["0"].value);
-		console.log(parsedJSON)
+		//console.log(jsonString);
+		var myJSON = jQuery.parseJSON(jsonString);
 		
+
+		var stringjson = myJSON.transactionEnvelope.payload.data.actions["0"].payload.action.proposal_response_payload.extension.results.ns_rwset[1].rwset.writes["0"].value;
+		console.log("canine object string : "+stringjson);
+		var canineObject = jQuery.parseJSON(myJSON.transactionEnvelope.payload.data.actions["0"].payload.action.proposal_response_payload.extension.results.ns_rwset[1].rwset.writes["0"].value);
+		console.log("string json : "+stringjson);
+		//console.log("canine object : "+canineObject);
+		updateCanineTable(canineObject);
 		
 	}
 	function ajaxFailure(message){
@@ -170,26 +173,30 @@ function updateVeterinaryTable(obj){
 
 }
 
+function updateCanineTable(obj){
+	var i = 0;
+	var parsedJSON = [];
+	//console.log("obj canine"+obj);
+	
+	$(obj).each(function( i ){
+  	var canineTable = $(
+  		' <tr><td><strong></strong>' +  obj.id + '</td>' +
+		' <td>' + obj.name + '</td>' +
+		' <td>' + obj.dateOfBirth + '</td>' +
+		' <td>' + obj.dateOfInsertion + '</td>' +
+		' <td>' + obj.description + '</td>' +
+		' <td>' + obj.sex + '</td>' +
+		' <td>' + obj.owner.id + '</td>' +
+		' <td>' + obj.veterinary.id + '</td><br>'); 
+	        $(".canineTableBody").append(canineTable);
+	 });
+}
+
 function updateOwnerTable(obj){
 	var i = 0;
 	var parsedJSON = [];
 	console.log("obj owner"+obj);
-	
-	$(obj).each(function( i ){
-  	var ownerTable = $(
-  		' <tr><td><strong></strong>' +  obj.id + '</td>' +
-		' <td>' + obj.practiceName + '</td>' +
-		' <td>' + obj.contactAddress + '</td>' +
-		' <td>' + obj.contactNumber + '</td>' +
-		' <td>' + obj.veterinary.id + '</td><br>'); 
-	        $(".ownerTableBody").append(ownerTable);
-	 });
-}
-
-function updateCanineTable(obj){
-	var i = 0;
-	var parsedJSON = [];
-	console.log("obj owner"+obj);
+	console.log("owner.name"+obj.name);
 	
 	$(obj).each(function( i ){
   	var ownerTable = $(

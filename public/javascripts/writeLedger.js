@@ -75,10 +75,27 @@ var write_canines = function() {
 	var dateOfBirth =  $('#dateOfBirth').val();
 	var dateOfChipInsertion =  $('#dateOfChipInsertion').val();
 	var description =  $('#description').val();
-	var gender =  $('#gender').val();
+	var gender =  $('#canineGender').val();
 	var premiseAddress =  $('#premiseAddress').val();
-	var ownerID =  $('#ownerID').val();
-	var vetID = $('#vetID').val();
+	var ownerID =  $('#canineOwnerID').val();
+	var vetID = $('#canineVetID').val();
+	console.log("----------------");
+	console.log("canine id "+canineID);
+	console.log("name "+canineID);
+	console.log("name "+canineName);
+	console.log("dateOfChipInsertion "+dateOfChipInsertion);
+	console.log("description "+description);
+	console.log("gender "+gender);
+	console.log("premiseAddress "+premiseAddress);
+	console.log("ownerID "+ownerID);
+	console.log("vetID "+vetID);
+	console.log("----------------");
+	
+	
+
+	console.log("premiseAddress"+premiseAddress);
+	console.log("canineOwnerID"+ownerID);
+	console.log("canineVetID"+vetID);
 
 	var JSONString = JSON.stringify({
 		fcn : "init_canine",
@@ -101,7 +118,7 @@ var write_canines = function() {
 		incrementCanineCount();
 		incrementNewAdditions();
 		show_modal(message);
-		
+		queryCanineDetails(message);
 	}
 }
 
