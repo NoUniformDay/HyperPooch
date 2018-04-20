@@ -70,7 +70,7 @@ router.use(function (req,res,next) {
 
 //landing page
 router.get("/",function(req,res){
-	  res.sendFile(path + "index.html");
+	  res.sendFile(path + "login.html");
 });
 
 //login page 
@@ -81,6 +81,10 @@ router.get("/login",function(req,res){
 //home directory - HyperPooch Admin Page
 router.get("/home",function(req,res){
 	  res.sendFile(path + "home.html");
+});
+
+app.get('/search', function (req, res, html) {
+	 res.sendFile(path + "search.html");
 });
 
 app.use("/",router);
