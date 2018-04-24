@@ -1,4 +1,12 @@
+//-------------------------------------------//
+//
+// Node.js server REST API
+// app.js is the main controller of the system
+// acts as an intermediary between the client and the blockchain ledger
+// includes various end points for invoking and querying transaction
+// heavily used the Fabric Node.js SDK
 
+//-------------------------------------------//
 'use strict';
 var log4js = require('log4js');
 var logger = log4js.getLogger('HyperPooch');
@@ -180,22 +188,7 @@ app.post('/chaincodes', function(req, res) {
 	logger.debug('chaincodeName : ' + chaincodeName);
 	logger.debug('chaincodePath  : ' + chaincodePath);
 	logger.debug('chaincodeVersion  : ' + chaincodeVersion);
-	if (!peers || peers.length == 0) {
-		res.json(getErrorMessage('\'peers\''));
-		return;
-	}
-	if (!chaincodeName) {
-		res.json(getErrorMessage('\'chaincodeName\''));
-		return;
-	}
-	if (!chaincodePath) {
-		res.json(getErrorMessage('\'chaincodePath\''));
-		return;
-	}
-	if (!chaincodeVersion) {
-		res.json(getErrorMessage('\'chaincodeVersion\''));
-		return;
-	}
+
 
 	install.installChaincode(peers, chaincodeName, chaincodePath, chaincodeVersion, req.body.username, req.body.orgName)
 	.then(function(message) {
@@ -215,22 +208,7 @@ app.post('/channels/:channelName/chaincodes', function(req, res) {
 	logger.debug('chaincodeVersion  : ' + chaincodeVersion);
 	logger.debug('fcn  : ' + fcn);
 	logger.debug('args  : ' + args);
-	if (!chaincodeName) {
-		res.json(getErrorMessage('\'chaincodeName\''));
-		return;
-	}
-	if (!chaincodeVersion) {
-		res.json(getErrorMessage('\'chaincodeVersion\''));
-		return;
-	}
-	if (!channelName) {
-		res.json(getErrorMessage('\'channelName\''));
-		return;
-	}
-	if (!args) {
-		res.json(getErrorMessage('\'args\''));
-		return;
-	}
+	
 	instantiate.instantiateChaincode(channelName, chaincodeName, chaincodeVersion, fcn, args, req.body.username, req.body.orgName)
 	.then(function(message) {
 		res.send(message);
@@ -251,22 +229,7 @@ app.post('/channels/:channelName/chaincodes/:chaincodeName', function(req, res) 
 	logger.debug('chaincodeName : ' + chaincodeName);
 	logger.debug('fcn  : ' + fcn);
 	logger.debug('args  : ' + args);
-	if (!chaincodeName) {
-		res.json(getErrorMessage('\'chaincodeName\''));
-		return;
-	}
-	if (!channelName) {
-		res.json(getErrorMessage('\'channelName\''));
-		return;
-	}
-	if (!fcn) {
-		res.json(getErrorMessage('\'fcn\''));
-		return;
-	}
-	if (!args) {
-		res.json(getErrorMessage('\'args\''));
-		return;
-	}
+	
 
 	invoke.invokeChaincode(peers, channelName, chaincodeName, fcn, args, req.body.username, req.body.orgName)
 	.then(function(message) {
@@ -289,24 +252,7 @@ app.get('/channels/:channelName/chaincodes/:chaincodeName', function(req, res) {
 	logger.debug('fcn : ' + fcn);
 	logger.debug('args : ' + args);
 
-	if (!chaincodeName) {
-		res.json(getErrorMessage('\'chaincodeName\''));
-		return;
-	}
-	if (!channelName) {
-		res.json(getErrorMessage('\'channelName\''));
-		return;
-	}
-	if (!fcn) {
-		res.json(getErrorMessage('\'fcn\''));
-		return;
-	}
-	if (!args) {
-		res.json(getErrorMessage('\'args\''));
-		return;
-	}
-	//args = args.replace(/'/g, '"');
-	//args = JSON.parse(args);
+	
 	logger.debug(args);
 
 	query.queryChaincode(peer, channelName, chaincodeName, args, fcn, req.query.username, req.query.orgName)
@@ -351,6 +297,10 @@ app.get('/channels/:channelName/transactions/:trxnId', function(req, res) {
 			res.send(message);
 		});
 });
+
+
+//---------------------------------------------//
+// Extras for getting block and channel information
 // Query Get Block by Hash
 app.get('/channels/:channelName/blocks', function(req, res) {
 	logger.debug('================ GET BLOCK BY HASH ======================');

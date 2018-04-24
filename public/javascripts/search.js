@@ -2,7 +2,6 @@
 
 $(document).ready(function() {
 	$("#canine_search_button").click(queryCanine);
-	
 	$("#owner_search_button").click(queryOwner);
 	
 });
@@ -45,7 +44,7 @@ var queryCanine = function(cID) {
 		var username = "eric"
 		var	orgName = "org1"
 		var	peer = "peer1"
-		//var tID = "e9ac272004c7840d12b6c998d0b393f93f051081f822cc1c47e48a247eb80edc"
+		
 
 	// 4. POST data to API to commit to blockchain
 	$.ajax({

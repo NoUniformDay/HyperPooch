@@ -20,7 +20,7 @@ type SimpleChaincode struct {
 }
 
 // ============================================================================================================================
-// Asset Definition - The ledger will store Canines and owners details
+// Asset Definition - The ledger will store Veterinarians, Canines and their Owners information
 // ============================================================================================================================
 
 type Veterinary struct {

@@ -25,6 +25,11 @@ form{
 	margin-top:5%;
 }
 
+.form-group{
+
+	display:inline;
+}
+
 .form-horizontal{
 	background-color:#f6f6f6;
 	width:60%;
@@ -409,23 +414,5 @@ label{
 	.btn-danger2{
 		margin-right:3%;
 	}
-}
-
-.SearchIcon
-{
-    color:#fff;
-   
-}
-.SearchButton
-{
-    background-color:#ED1C24;
-    border-radius:1px;
-}
-.SearchButton:hover{
-    background-color:#C4161C;
-}
-
-.SearchBar{
 
 }
-

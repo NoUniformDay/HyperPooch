@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# Copyright IBM Corp. All Rights Reserved.
+# Copyright Linux Foundation Hyperledger Project. All Rights Reserved.
+# https://www.hyperledger.org
 #
 # SPDX-License-Identifier: Apache-2.0
 #

@@ -38,12 +38,7 @@
             <div class="navbar-header"> <a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i class="fa fa-bars"></i></a>
                 <div class="top-left-part"><a class="logo" href="index.html"><b><img src="/home/plugins/images/pawprint2.png" alt="home" /></b></a></div>
                 <ul class="nav navbar-top-links navbar-left m-l-20 hidden-xs">
-                    <li>
-                        <form role="search" class="app-search hidden-xs">
-                            <input type="text" placeholder="Search Canines..." class="form-control"><a href=""><i class="fa fa-search"></i></a>
-                            <input type="text" placeholder="Search Owners" class="form-control"> <a href=""><i class="fa fa-search"></i></a>
-                        </form>
-                    </li>
+
                     <br>
                     <li>
                     		<h1>Welcome to HyperPooch Veterinary Dashboard!</h1>
@@ -75,7 +70,7 @@
                    
                 </ul>
                 <div class="center p-20">
-                    <span class="hide-menu"><a href="home.html" target="_blank" class="btn btn-danger btn-block btn-rounded waves-effect waves-light">HyperPooch</a></span>
+                    <span class="hide-menu"><a href="/search" target="_blank" class="btn btn-danger btn-block btn-rounded waves-effect waves-light">HyperPooch Search</a></span>
                 </div>
             </div>
         </div>
@@ -98,7 +93,8 @@
                     <div class="col-lg-3 col-sm-8 col-md-8 col-xs-12">
                         <h4 class="page-title">Current clients and canines listed below. To add new clients enter details in the form below</h4>
                     </div>
-                 </div>
+                 </div>    
+                 
    <!--------------------------- STATS -------------------------------------------------------------------------------->
                 <!-- row -->
                 <div class="row">
@@ -156,7 +152,7 @@
                 </div>
                 <!-- /.row -->
  
-
+ 
  <!-----------------------------DATA ENTRIES ----------------------------------------------------------------------------------------------->       
          		
          		<!--row -->
@@ -167,7 +163,7 @@
                                 
                             </h3>
                             <div class="table-responsive">
-                                <table class="table ">
+                                <table class="table">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -247,27 +243,27 @@
                     </div>
                 </div>
                 
-      <!-------------------------------------------------------------------------------------------------------------------------------->          
-<section class="block remove-top" id="txmodal" style="display: none;">
-<div class="container">
-  <h2></h2>
-  <br>
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Transaction Successful</h4>
-        </div>
-        <div class="modal-body">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" id="closeModal">Close</button>
-        </div>
-      </div>
-</div>
-</section>
+    <!-------------------------------------------------------------------------------------------------------------------------------->          
+				<section class="block remove-top" id="txmodal" style="display: none; position:relative; width=500px;>
+				<div class="container">
+				  <h2></h2>
+				  <br>
+				      <!-- Modal content-->
+				      <div class="modal-content">
+				        <div class="modal-header">
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <h4 class="modal-title">Transaction Successful</h4>
+				        </div>
+				        <div class="modal-body">
+				        </div>
+				        <div class="modal-footer">
+				          <button type="button" class="btn btn-default" id="closeModal">Close</button>
+				        </div>
+				      </div>
+				</div>
+				</section>
                 
-<!-------------------------------------------------------------------------------------------------------------------------------->
+ <!-------------------------------------------------------------------------------------------------------------------------------->
                 <div class="row">
                 <!---------------- NEW OWNER FORM ------------------------------------>
                 		<div class="col-sm-6">
@@ -320,16 +316,16 @@
 					      <input id="description" placeholder="Canine Description" type="text" tabindex="5" required>
 					    </fieldset>
 					    <fieldset>
-					      <input id="gender" placeholder="Canine Gender" type="text" tabindex="6" required>
+					      <input id="canineGender" placeholder="Canine Gender" type="text" tabindex="6" required>
 					    </fieldset>
 					    <fieldset>
 					      <input id="premiseAddress" placeholder="Premise Address Canine held" type="text" tabindex="7" required>
 					    </fieldset>
 					    <fieldset>
-					      <input id="ownerID" placeholder="Owner's ID Number" type="text" tabindex="8" required>
+					      <input id="canineOwnerID" placeholder="Owner's ID Number" type="text" tabindex="8" required>
 					    </fieldset>
-					    <fieldset>
-					      <input id="vetID" placeholder="Veterinarian's ID Number" type="text" tabindex="9" required>
+					    <fieldset>	
+					      <input id="canineVetID" placeholder="Veterinarian's ID Number" type="text" tabindex="9" required>
 					    </fieldset>
 					    <fieldset>
 					      <textarea id="notes" placeholder="Add any extra notes here" tabindex="10" required></textarea>
@@ -339,9 +335,6 @@
 					    </fieldset>	    
 					  </form>
 					</div>
-                   </div>  
-                </div>
-                <!-- /.row -->
             </div>
             <!-- /.container-fluid -->
             <footer class="footer text-center"> 2018 HyperPooch brought to you by Eric McEvoy of the National University of Ireland, Galway </footer>
